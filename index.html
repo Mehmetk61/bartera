@@ -226,11 +226,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Supabase Bağlantı Parametreleri (Doğrulanmış ve Eksiksiz)
         const SUPABASE_URL = 'https://mnbqkmfxntxiafrnvzxm.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_QjcsQ_0oG-qHAM3FEQK8KQ_Rl_0BkLe';
         
-        // Supabase istemcisini güvenli modda başlatıyoruz
         const _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let seciliMod = 'nakit';
@@ -259,7 +257,6 @@
             sistemiSifirla();
         }
 
-        // Veriyi Asenkron Olarak Arka Planda Supabase'e Uçuran Fonksiyon
         async function veritabaninaKaydet(urun, bütce, modEtiketi) {
             try {
                 const { error } = await _supabaseClient
@@ -287,7 +284,6 @@
                 return;
             }
 
-            // Butona tıklandığı an veriyi sessizce arka planda buluta gönderiyoruz
             veritabaninaKaydet(urun, bütce, modEtiketiGetir());
 
             const simKutusu = document.getElementById('sim-kutusu');
@@ -303,7 +299,7 @@
             clearInterval(simInterval);
             simInterval = setInterval(() => {
                 sayac++;
-                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02)); // %2-%6 indirim
+                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02));
                 mevcutFiyat -= indirim;
                 
                 let rastgeleFirma = firmalar[Math.floor(Math.random() * firmalar.length)];
