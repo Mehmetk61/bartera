@@ -3,206 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BARTERA - Global Likidite Borsası</title>
+    <title>Bartera - Akıllı Takas ve Tersine İhale Platformu</title>
     <style>
-        /* Premium FinTech Tema Altyapısı */
-        body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
-            color: #f8fafc;
+        :root {
+            --bg-dark: #0a0f1d;
+            --panel-bg: #131c31;
+            --accent-orange: #ff6b35;
+            --accent-blue: #00b4d8;
+            --text-light: #f8f9fa;
+            --text-muted: #8da2bb;
+            --success-green: #2ec4b6;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 50px 20px;
-            text-align: center;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
+
         .container {
-            max-width: 850px;
-            margin: 0 auto;
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        h1 {
-            color: #3b82f6;
-            font-size: 3.5rem;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            margin: 0 0 5px 0;
-            background: linear-gradient(to right, #3b82f6, #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .slogan {
-            font-size: 1.3rem;
-            color: #10b981;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 45px;
-        }
-        .tabs {
+            width: 100%;
+            max-width: 500px;
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 35px;
+            flex-direction: column;
+            gap: 20px;
         }
-        .tab-btn {
-            background-color: rgba(51, 65, 85, 0.5);
-            color: #94a3b8;
+
+        header {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        header h1 {
+            color: var(--accent-blue);
+            font-size: 2rem;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .panel {
+            background-color: var(--panel-bg);
+            border-radius: 16px;
+            padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 16px 28px;
-            font-size: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-main {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid var(--accent-blue);
+            color: var(--text-light);
+            padding: 15px 10px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.25s ease;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-align: center;
         }
-        .tab-btn:hover {
-            background-color: rgba(71, 85, 105, 0.8);
-            color: #fff;
-            transform: translateY(-2px);
+
+        .btn-main.active {
+            background: var(--accent-blue);
+            color: var(--bg-dark);
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
         }
-        .special-btn {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: #0f172a;
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-orange);
+        }
+
+        .btn-action {
+            width: 100%;
+            background: linear-gradient(135s, var(--accent-orange), #ff4500);
             border: none;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .special-btn:hover {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: #0f172a;
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-            transform: translateY(-2px);
+
+        .simulation-box {
+            display: none;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 250px;
+            overflow-y: auto;
         }
-        .ihale-alani {
-            background: rgba(15, 23, 42, 0.6);
-            padding: 30px;
-            border-radius: 16px;
-            text-align: left;
-            margin-top: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .ihale-header {
+
+        .log-entry {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
         }
-        .ihale-header h3 {
-            color: #f59e0b;
-            margin: 0;
-            font-size: 1.4rem;
+
+        .badge-takas {
+            background-color: var(--success-green);
+            color: var(--bg-dark);
+            padding: 2px 6px;
+            border-radius: 4px;
             font-weight: 700;
+            font-size: 0.75rem;
         }
-        .teklif-listesi {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .teklif-item {
-            background: rgba(30, 41, 59, 0.4);
-            padding: 16px;
-            margin-bottom: 12px;
-            border-left: 4px solid #f59e0b;
-            border-radius: 8px;
-            font-size: 1rem;
-            line-height: 1.5;
-            border-top: 1px solid rgba(255, 255, 255, 0.02);
-            border-right: 1px solid rgba(255, 255, 255, 0.02);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-        }
-        .clear-btn {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 8px 14px;
-            font-size: 0.85rem;
-            border-radius: 8px;
+
+        .btn-reset {
+            background: transparent;
+            border: 1px dashed var(--text-muted);
+            color: var(--text-muted);
+            padding: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .clear-btn:hover {
-            background-color: rgba(239, 68, 68, 0.4);
-            color: #fff;
+            font-size: 0.8rem;
+            width: 100%;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>BARTERA</h1>
-        <div class="slogan">"Paran Yoksa, Değerin Var!"</div>
-        
-        <div class="tabs">
-            <button class="tab-btn" onclick="alert('Mal/Hizmet havuzu yakında açılacak.')">Mal / Hizmet Arz Et</button>
-            <button class="tab-btn" onclick="alert('Barter borsası havuzu yükleniyor.')">Barter Havuzu</button>
-            <button class="tab-btn special-btn" onclick="ihaleBaslat()">💰 NAKİT / EMTİAM VAR</button>
+        <header>
+            <h1>BARTERA</h1>
+            <p>Geleceğin Ticaret ve Tersine İhale Ekosistemi</p>
+        </header>
+
+        <!-- Modül Seçim Alanı (Hepsi Aktif) -->
+        <div class="panel">
+            <div class="panel-title">1. İşlem Modülünü Seçin</div>
+            <div class="grid-buttons">
+                <div class="btn-main active" id="mod-nakit" onclick="selectMod('nakit')">Nakit / Emtia (Aktif)</div>
+                <div class="btn-main" id="mod-havuz" onclick="selectMod('havuz')">Barter Havuzu (Aktif)</div>
+                <div class="btn-main" id="mod-mal" onclick="selectMod('mal')">Mal / Hizmet Al (Aktif)</div>
+                <div class="btn-main" id="mod-hizmet" onclick="selectMod('hizmet')">Mal / Hizmet Sat (Aktif)</div>
+            </div>
         </div>
 
-        <div class="ihale-alani">
-            <div class="ihale-header">
-                <h3>📊 Bartera Merkezi Veri Deposu</h3>
-                <button class="clear-btn" onclick="hafizayiTemizle()">Hafızayı Sıfırla</button>
-            </div>
-            <p id="ihaleBaslik" style="color: #94a3b8; font-size: 1rem; margin-bottom: 20px;">Sistem aktif. Yapılan tüm likidite ihaleleri ve esnaf teklifleri aşağıda kalıcı olarak saklanır.</p>
+        <!-- Dinamik Giriş ve İhale Formu -->
+        <div class="panel" id="ihale-paneli">
+            <div class="panel-title" id="form-baslik">Nakit / Emtia Tersine İhale Girişi</div>
             
-            <div id="teklifler" class="teklif-listesi">
-                <!-- Veriler buraya akacak -->
+            <div class="form-group">
+                <label for="urun-adi">Talep Edilen Mal / Hizmet:</label>
+                <input type="text" id="urun-adi" class="form-control" placeholder="Örn: 100 Adet Ofis Koltuğu">
             </div>
+
+            <div class="form-group">
+                <label for="hedef-butce">Maksimum Hedef Bütçe (TL):</label>
+                <input type="number" id="hedef-butce" class="form-control" placeholder="Örn: 150000">
+            </div>
+
+            <button class="btn-action" onclick="ihaleBaslat()">Tersine İhale Başlat</button>
+
+            <!-- Canlı Simülasyon Akış Alanı -->
+            <div class="simulation-box" id="sim-kutusu"></div>
+            
+            <button class="btn-reset" id="reset-btn" style="display:none;" onclick="sistemiSifirla()">Sistemi ve Hafızayı Sıfırla</button>
         </div>
     </div>
 
     <script>
-        window.onload = function() {
-            verileriEkranaBas();
-        };
+        let seciliMod = 'nakit';
+        let simInterval;
+
+        function selectMod(mod) {
+            seciliMod = mod;
+            // Butonların aktiflik durumunu görsel olarak değiştir
+            document.querySelectorAll('.btn-main').forEach(btn => btn.classList.remove('active'));
+            
+            let modBaslik = "";
+            if(mod === 'nakit') {
+                document.getElementById('mod-nakit').classList.add('active');
+                modBaslik = "Nakit / Emtia Tersine İhale Girişi";
+            } else if(mod === 'havuz') {
+                document.getElementById('mod-havuz').classList.add('active');
+                modBaslik = "Barter Havuzu Akıllı Takas Girişi";
+            } else if(mod === 'mal') {
+                document.getElementById('mod-mal').classList.add('active');
+                modBaslik = "Mal / Hizmet Alım İhale Girişi";
+            } else if(mod === 'hizmet') {
+                document.getElementById('mod-hizmet').classList.add('active');
+                modBaslik = "Mal / Hizmet Satış Teklif Girişi";
+            }
+            
+            document.getElementById('form-baslik').innerText = modBaslik;
+            sistemiSifirla();
+        }
 
         function ihaleBaslat() {
-            var miktar = prompt("Sisteme sunmak istediğiniz Nakit veya Emtia miktarını girin:", "5000 TL");
-            
-            if (miktar != null && miktar != "") {
-                var yeniTeklifler = [
-                    "<strong>[" + miktar + " İhalesi] - [Esnaf]:</strong> Normal değeri " + (parseInt(miktar)*2 || 10000) + " TL olan tekstil stoğunu vermeyi kabul etti.",
-                    "<strong>[" + miktar + " İhalesi] - [Eğitmen]:</strong> Bu nakit karşılığında 25 saatlik özel uzmanlık dersi tanımladı.",
-                    "<strong>[" + miktar + " İhalesi] - [Otel]:</strong> Hafta içi atıl kontenjandan 3 gecelik VIP konaklama sözü verdi."
-                ];
+            const urun = document.getElementById('urun-adi').value || "Belirtilmeyen Ürün/Hizmet";
+            let bütce = parseFloat(document.getElementById('hedef-butce').value);
 
-                var eskiKayıtlar = JSON.parse(localStorage.getItem("bartera_verileri")) || [];
-                var guncelKayitlar = eskiKayıtlar.concat(yeniTeklifler);
+            if(!bütce || bütce <= 0) {
+                alert("Lütfen geçerli bir hedef bütçe girin lider!");
+                return;
+            }
+
+            const simKutusu = document.getElementById('sim-kutusu');
+            simKutusu.style.display = "block";
+            simKutusu.innerHTML = `<div class="log-entry" style="color:var(--accent-blue)">[SİSTEM] ${modEtiketiGetir()} İhalesi Başlatıldı...</div>`;
+            
+            document.getElementById('reset-btn').style.display = "block";
+
+            let sayac = 0;
+            let mevcutFiyat = bütce;
+            const firmalar = ["Asya Ticaret", "Kamiloğlu Lojistik", "Avrasya Ltd.", "TeknoGlobal", "Ege Tedarik"];
+
+            clearInterval(simInterval);
+            simInterval = setInterval(() => {
+                sayac++;
+                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02)); // %2 ile %6 arası indirim
+                mevcutFiyat -= indirim;
                 
-                localStorage.setItem("bartera_verileri", JSON.stringify(guncelKayitlar));
-                verileriEkranaBas();
-            }
-        }
-
-        function verileriEkranaBas() {
-            var kayıtlar = JSON.parse(localStorage.getItem("bartera_verileri")) || [];
-            var kutu = document.getElementById('teklifler');
-            kutu.innerHTML = "";
-            
-            if(kayıtlar.length === 0) {
-                kutu.innerHTML = "<p style='color:#64748b; text-align:center; padding: 20px;'>Henüz verilmiş bir likidite teklifi yok. Turuncu butona basarak ilk ihaleyi başlatın!</p>";
-            } else {
-                for (var i = kayıtlar.length - 1; i >= 0; i--) {
-                    kutu.innerHTML += "<div class='teklif-item'>" + kayıtlar[i] + "</div>";
+                let rastgeleFirma = firmalar[Math.floor(Math.random() * firmalar.length)];
+                
+                let log = document.createElement('div');
+                log.className = 'log-entry';
+                
+                // Yatırımcıyı vuracağımız o meşhur "Takas Rozeti" senaryosu
+                if(sayac === 3 || sayac === 5) {
+                    log.innerHTML = `<span>⚡ ${rastgeleFirma}: <b>${mevcutFiyat.toLocaleString('tr-TR')} TL</b></span> <span class="badge-takas">%50 TAKAS İMKANI</span>`;
+                } else {
+                    log.innerHTML = `<span>📉 ${rastgeleFirma}: ${mevcutFiyat.toLocaleString('tr-TR')} TL</span>`;
                 }
-            }
+                
+                simKutusu.appendChild(log);
+                simKutusu.scrollTop = simKutusu.scrollHeight;
+
+                if(sayac >= 6) {
+                    clearInterval(simInterval);
+                    let sonuc = document.createElement('div');
+                    sonuc.className = 'log-entry';
+                    sonuc.style.color = 'var(--success-green)';
+                    sonuc.style.fontWeight = 'bold';
+                    sonuc.style.marginTop = '10px';
+                    sonuc.innerHTML = `<span>🏆 EN UYGUN TEKLİF: ${mevcutFiyat.toLocaleString('tr-TR')} TL (Eşleşme Sağlandı!)</span>`;
+                    simKutusu.appendChild(sonuc);
+                    simKutusu.scrollTop = simKutusu.scrollHeight;
+                }
+            }, 1500);
         }
 
-        function hafizayiTemizle() {
-            if(confirm("Veri tabanındaki tüm kalıcı ihale kayıtlarını silmek istediğinize emin misiniz?")) {
-                localStorage.removeItem("bartera_verileri");
-                verileriEkranaBas();
-            }
+        function modEtiketiGetir() {
+            if(seciliMod === 'nakit') return "Nakit/Emtia";
+            if(seciliMod === 'havuz') return "Barter Havuzu";
+            if(seciliMod === 'mal') return "Mal/Hizmet Alım";
+            return "Mal/Hizmet Satış";
+        }
+
+        function sistemiSifirla() {
+            clearInterval(simInterval);
+            document.getElementById('urun-adi').value = "";
+            document.getElementById('hedef-butce').value = "";
+            const simKutusu = document.getElementById('sim-kutusu');
+            simKutusu.innerHTML = "";
+            simKutusu.style.display = "none";
+            document.getElementById('reset-btn').style.display = "none";
         }
     </script>
-
 </body>
 </html>
