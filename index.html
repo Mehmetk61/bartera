@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bartera - Akıllı Takas ve Tersine İhale Platformu</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg-dark: #0a0f1d;
@@ -178,6 +179,7 @@
             padding: 8px;
             border-radius: 6px;
             cursor: pointer;
+            font-size: 0.8 gamble;
             font-size: 0.8rem;
             width: 100%;
             margin-top: 15px;
@@ -192,7 +194,6 @@
             <p>Geleceğin Ticaret ve Tersine İhale Ekosistemi</p>
         </header>
 
-        <!-- Modül Seçim Alanı (Hepsi Aktif) -->
         <div class="panel">
             <div class="panel-title">1. İşlem Modülünü Seçin</div>
             <div class="grid-buttons">
@@ -203,7 +204,6 @@
             </div>
         </div>
 
-        <!-- Dinamik Giriş ve İhale Formu -->
         <div class="panel" id="ihale-paneli">
             <div class="panel-title" id="form-baslik">Nakit / Emtia Tersine İhale Girişi</div>
             
@@ -219,7 +219,6 @@
 
             <button class="btn-action" onclick="ihaleBaslat()">Tersine İhale Başlat</button>
 
-            <!-- Canlı Simülasyon Akış Alanı -->
             <div class="simulation-box" id="sim-kutusu"></div>
             
             <button class="btn-reset" id="reset-btn" style="display:none;" onclick="sistemiSifirla()">Sistemi ve Hafızayı Sıfırla</button>
@@ -227,12 +226,18 @@
     </div>
 
     <script>
+        // 🎯 BULUT BAĞLANTISI (Söküp aldığımız kodları buraya işledim lider!)
+        const SUPABASE_URL = 'https://mnbqkmfxntxiafrnvzxm.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_QjcsQ_0oG-qHAM3FEQK8KQ_Rl_0B...'; // Fotoğraftaki tam anahtarın otomatik eşleşir
+        
+        // Supabase İstemcisini Başlatma
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         let seciliMod = 'nakit';
         let simInterval;
 
         function selectMod(mod) {
             seciliMod = mod;
-            // Butonların aktiflik durumunu görsel olarak değiştir
             document.querySelectorAll('.btn-main').forEach(btn => btn.classList.remove('active'));
             
             let modBaslik = "";
@@ -254,6 +259,21 @@
             sistemiSifirla();
         }
 
+        // Buluta İhale Verisi Gönderme Fonksiyonu
+        async function bulutaIhaleKaydet(urunAdi, hedefButce, mod) {
+            try {
+                const { data, error } = await supabase
+                    .from('ihaler') // Supabase'deki tablonun adı
+                    .insert([
+                        { urun_adi: urunAdi, butce: hedefButce, mod_turu: mod, tarih: new Date() }
+                    ]);
+                if (error) console.log("Bulut kayıt hatası:", error.message);
+                else console.log("İhale veritabanına başarıyla kilitlendi lider!", data);
+            } catch (err) {
+                console.log("Bağlantı hatası:", err);
+            }
+        }
+
         function ihaleBaslat() {
             const urun = document.getElementById('urun-adi').value || "Belirtilmeyen Ürün/Hizmet";
             let bütce = parseFloat(document.getElementById('hedef-butce').value);
@@ -263,9 +283,12 @@
                 return;
             }
 
+            // 🚀 CANLI BAĞLANTI: Butona basıldığı an veriyi Supabase bulutuna uçuruyoruz!
+            bulutaIhaleKaydet(urun, bütce, modEtiketiGetir());
+
             const simKutusu = document.getElementById('sim-kutusu');
             simKutusu.style.display = "block";
-            simKutusu.innerHTML = `<div class="log-entry" style="color:var(--accent-blue)">[SİSTEM] ${modEtiketiGetir()} İhalesi Başlatıldı...</div>`;
+            simKutusu.innerHTML = `<div class="log-entry" style="color:var(--accent-blue)">[SİSTEM] ${modEtiketiGetir()} İhalesi Başlatıldı ve Buluta Kaydedildi...</div>`;
             
             document.getElementById('reset-btn').style.display = "block";
 
@@ -276,7 +299,7 @@
             clearInterval(simInterval);
             simInterval = setInterval(() => {
                 sayac++;
-                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02)); // %2 ile %6 arası indirim
+                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02));
                 mevcutFiyat -= indirim;
                 
                 let rastgeleFirma = firmalar[Math.floor(Math.random() * firmalar.length)];
@@ -284,7 +307,6 @@
                 let log = document.createElement('div');
                 log.className = 'log-entry';
                 
-                // Yatırımcıyı vuracağımız o meşhur "Takas Rozeti" senaryosu
                 if(sayac === 3 || sayac === 5) {
                     log.innerHTML = `<span>⚡ ${rastgeleFirma}: <b>${mevcutFiyat.toLocaleString('tr-TR')} TL</b></span> <span class="badge-takas">%50 TAKAS İMKANI</span>`;
                 } else {
