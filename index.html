@@ -3,129 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bartera - Akıllı Takas ve Tersine İhale Platformu</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>BARTERA X - Ultra-Premium Global Trading & Barter Ecosystem</title>
     <style>
         :root {
-            --bg-dark: #0a0f1d;
-            --panel-bg: #131c31;
+            --bg-dark: #060a13;
+            --panel-bg: rgba(19, 28, 49, 0.7);
             --accent-orange: #ff6b35;
             --accent-blue: #00b4d8;
-            --text-light: #f8f9fa;
-            --text-muted: #8da2bb;
-            --success-green: #2ec4b6;
+            --neon-glow: #00f5ff;
+            --text-light: #ffffff;
+            --text-muted: #7e9bbd;
+            --success-green: #00f5d4;
+            --premium-gold: #fee440;
+            --border-glow: rgba(0, 180, 216, 0.2);
         }
 
         * {
+            box-shadow: none;
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background: radial-gradient(circle at center, #0d1b2a 0%, var(--bg-dark) 100%);
             color: var(--text-light);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 650px;
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
+        .ticker-wrap {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-glow);
+            border-radius: 30px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--success-green);
+            animation: pulse 1.5s infinite;
+        }
+
         header {
             text-align: center;
-            padding: 10px 0;
+            padding: 15px 0;
+            position: relative;
         }
 
         header h1 {
-            color: var(--accent-blue);
-            font-size: 2rem;
-            letter-spacing: 2px;
-            font-weight: 800;
+            color: var(--text-light);
+            font-size: 3rem;
+            letter-spacing: 6px;
+            font-weight: 900;
+            background: linear-gradient(135s, #fff 30%, var(--accent-blue), var(--neon-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 180, 216, 0.2);
         }
 
         header p {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-top: 5px;
+            letter-spacing: 1px;
         }
 
         .panel {
-            background-color: var(--panel-bg);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s ease;
+        }
+
+        .panel:hover {
+            border-color: rgba(0, 180, 216, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 180, 216, 0.1);
         }
 
         .panel-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--text-light);
-            margin-bottom: 15px;
-            font-weight: 600;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
         }
 
         .grid-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 14px;
         }
 
         .btn-main {
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid var(--accent-blue);
-            color: var(--text-light);
-            padding: 15px 10px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 18px 15px;
+            border-radius: 16px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.9rem;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-main:hover {
+            border-color: var(--accent-blue);
+            color: white;
+            background: rgba(0, 180, 216, 0.05);
         }
 
         .btn-main.active {
-            background: var(--accent-blue);
-            color: var(--bg-dark);
-            box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
+            background: linear-gradient(135s, rgba(0, 180, 216, 0.2), rgba(0, 245, 255, 0.1));
+            border: 2px solid var(--neon-glow);
+            color: white;
+            box-shadow: 0 0 25px rgba(0, 245, 255, 0.25), inset 0 0 10px rgba(0, 245, 255, 0.2);
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             color: var(--text-muted);
             font-size: 0.85rem;
-            margin-bottom: 6px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .form-control {
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: 12px;
             color: white;
-            font-size: 1rem;
+            font-size: 1.05rem;
             outline: none;
+            transition: all 0.3s;
         }
 
         .form-control:focus {
             border-color: var(--accent-orange);
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.2);
         }
 
         .btn-action {
@@ -133,219 +194,85 @@
             background: linear-gradient(135s, var(--accent-orange), #ff4500);
             border: none;
             color: white;
-            padding: 14px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1rem;
+            padding: 18px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 1.1rem;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.4);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            transition: all 0.3s;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.6);
+        }
+
+        .ai-analyst-panel {
+            display: none;
+            background: rgba(0, 180, 216, 0.05);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #d1e2f3;
         }
 
         .simulation-box {
             display: none;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 15px;
-            max-height: 250px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 350px;
             overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .log-entry {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .log-row-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .badge-takas {
-            background-color: var(--success-green);
-            color: var(--bg-dark);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 700;
+        .log-row-bottom {
+            display: flex;
+            justify-content: space-between;
             font-size: 0.75rem;
-        }
-
-        .btn-reset {
-            background: transparent;
-            border: 1px dashed var(--text-muted);
             color: var(--text-muted);
-            padding: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 6px;
+            margin-top: 2px;
+        }
+
+        .badge-premium {
+            background: linear-gradient(135s, #00f5d4, #00b4d8);
+            color: #060a13;
+            padding: 3px 8px;
             border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8 gamble;
-            font-size: 0.8rem;
-            width: 100%;
-            margin-top: 15px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <header>
-            <h1>BARTERA</h1>
-            <p>Geleceğin Ticaret ve Tersine İhale Ekosistemi</p>
-        </header>
-
-        <div class="panel">
-            <div class="panel-title">1. İşlem Modülünü Seçin</div>
-            <div class="grid-buttons">
-                <div class="btn-main active" id="mod-nakit" onclick="selectMod('nakit')">Nakit / Emtia (Aktif)</div>
-                <div class="btn-main" id="mod-havuz" onclick="selectMod('havuz')">Barter Havuzu (Aktif)</div>
-                <div class="btn-main" id="mod-mal" onclick="selectMod('mal')">Mal / Hizmet Al (Aktif)</div>
-                <div class="btn-main" id="mod-hizmet" onclick="selectMod('hizmet')">Mal / Hizmet Sat (Aktif)</div>
-            </div>
-        </div>
-
-        <div class="panel" id="ihale-paneli">
-            <div class="panel-title" id="form-baslik">Nakit / Emtia Tersine İhale Girişi</div>
-            
-            <div class="form-group">
-                <label for="urun-adi">Talep Edilen Mal / Hizmet:</label>
-                <input type="text" id="urun-adi" class="form-control" placeholder="Örn: 100 Adet Ofis Koltuğu">
-            </div>
-
-            <div class="form-group">
-                <label for="hedef-butce">Maksimum Hedef Bütçe (TL):</label>
-                <input type="number" id="hedef-butce" class="form-control" placeholder="Örn: 150000">
-            </div>
-
-            <button class="btn-action" onclick="ihaleBaslat()">Tersine İhale Başlat</button>
-
-            <div class="simulation-box" id="sim-kutusu"></div>
-            
-            <button class="btn-reset" id="reset-btn" style="display:none;" onclick="sistemiSifirla()">Sistemi ve Hafızayı Sıfırla</button>
-        </div>
-    </div>
-
-    <script>
-        // 🎯 BULUT BAĞLANTISI (Söküp aldığımız kodları buraya işledim lider!)
-        const SUPABASE_URL = 'https://mnbqkmfxntxiafrnvzxm.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_QjcsQ_0oG-qHAM3FEQK8KQ_Rl_0B...'; // Fotoğraftaki tam anahtarın otomatik eşleşir
-        
-        // Supabase İstemcisini Başlatma
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        let seciliMod = 'nakit';
-        let simInterval;
-
-        function selectMod(mod) {
-            seciliMod = mod;
-            document.querySelectorAll('.btn-main').forEach(btn => btn.classList.remove('active'));
-            
-            let modBaslik = "";
-            if(mod === 'nakit') {
-                document.getElementById('mod-nakit').classList.add('active');
-                modBaslik = "Nakit / Emtia Tersine İhale Girişi";
-            } else if(mod === 'havuz') {
-                document.getElementById('mod-havuz').classList.add('active');
-                modBaslik = "Barter Havuzu Akıllı Takas Girişi";
-            } else if(mod === 'mal') {
-                document.getElementById('mod-mal').classList.add('active');
-                modBaslik = "Mal / Hizmet Alım İhale Girişi";
-            } else if(mod === 'hizmet') {
-                document.getElementById('mod-hizmet').classList.add('active');
-                modBaslik = "Mal / Hizmet Satış Teklif Girişi";
-            }
-            
-            document.getElementById('form-baslik').innerText = modBaslik;
-            sistemiSifirla();
+            font-weight: 800;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 10px rgba(0, 245, 212, 0.3);
         }
 
-        // Buluta İhale Verisi Gönderme Fonksiyonu
-        async function bulutaIhaleKaydet(urunAdi, hedefButce, mod) {
-            try {
-                const { data, error } = await supabase
-                    .from('ihaler') // Supabase'deki tablonun adı
-                    .insert([
-                        { urun_adi: urunAdi, butce: hedefButce, mod_turu: mod, tarih: new Date() }
-                    ]);
-                if (error) console.log("Bulut kayıt hatası:", error.message);
-                else console.log("İhale veritabanına başarıyla kilitlendi lider!", data);
-            } catch (err) {
-                console.log("Bağlantı hatası:", err);
-            }
-        }
-
-        function ihaleBaslat() {
-            const urun = document.getElementById('urun-adi').value || "Belirtilmeyen Ürün/Hizmet";
-            let bütce = parseFloat(document.getElementById('hedef-butce').value);
-
-            if(!bütce || bütce <= 0) {
-                alert("Lütfen geçerli bir hedef bütçe girin lider!");
-                return;
-            }
-
-            // 🚀 CANLI BAĞLANTI: Butona basıldığı an veriyi Supabase bulutuna uçuruyoruz!
-            bulutaIhaleKaydet(urun, bütce, modEtiketiGetir());
-
-            const simKutusu = document.getElementById('sim-kutusu');
-            simKutusu.style.display = "block";
-            simKutusu.innerHTML = `<div class="log-entry" style="color:var(--accent-blue)">[SİSTEM] ${modEtiketiGetir()} İhalesi Başlatıldı ve Buluta Kaydedildi...</div>`;
-            
-            document.getElementById('reset-btn').style.display = "block";
-
-            let sayac = 0;
-            let mevcutFiyat = bütce;
-            const firmalar = ["Asya Ticaret", "Kamiloğlu Lojistik", "Avrasya Ltd.", "TeknoGlobal", "Ege Tedarik"];
-
-            clearInterval(simInterval);
-            simInterval = setInterval(() => {
-                sayac++;
-                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02));
-                mevcutFiyat -= indirim;
-                
-                let rastgeleFirma = firmalar[Math.floor(Math.random() * firmalar.length)];
-                
-                let log = document.createElement('div');
-                log.className = 'log-entry';
-                
-                if(sayac === 3 || sayac === 5) {
-                    log.innerHTML = `<span>⚡ ${rastgeleFirma}: <b>${mevcutFiyat.toLocaleString('tr-TR')} TL</b></span> <span class="badge-takas">%50 TAKAS İMKANI</span>`;
-                } else {
-                    log.innerHTML = `<span>📉 ${rastgeleFirma}: ${mevcutFiyat.toLocaleString('tr-TR')} TL</span>`;
-                }
-                
-                simKutusu.appendChild(log);
-                simKutusu.scrollTop = simKutusu.scrollHeight;
-
-                if(sayac >= 6) {
-                    clearInterval(simInterval);
-                    let sonuc = document.createElement('div');
-                    sonuc.className = 'log-entry';
-                    sonuc.style.color = 'var(--success-green)';
-                    sonuc.style.fontWeight = 'bold';
-                    sonuc.style.marginTop = '10px';
-                    sonuc.innerHTML = `<span>🏆 EN UYGUN TEKLİF: ${mevcutFiyat.toLocaleString('tr-TR')} TL (Eşleşme Sağlandı!)</span>`;
-                    simKutusu.appendChild(sonuc);
-                    simKutusu.scrollTop = simKutusu.scrollHeight;
-                }
-            }, 1500);
-        }
-
-        function modEtiketiGetir() {
-            if(seciliMod === 'nakit') return "Nakit/Emtia";
-            if(seciliMod === 'havuz') return "Barter Havuzu";
-            if(seciliMod === 'mal') return "Mal/Hizmet Alım";
-            return "Mal/Hizmet Satış";
-        }
-
-        function sistemiSifirla() {
-            clearInterval(simInterval);
-            document.getElementById('urun-adi').value = "";
-            document.getElementById('hedef-butce').value = "";
-            const simKutusu = document.getElementById('sim-kutusu');
-            simKutusu.innerHTML = "";
-            simKutusu.style.display = "none";
-            document.getElementById('reset-btn').style.display = "none";
-        }
-    </script>
-</body>
-</html>
+        .badge-gold {
+            background: linear-gradient(135s, var(--premium-gold), #ffb703);
+            color: #0
