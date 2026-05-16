@@ -224,7 +224,15 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // Supabase Bağlantı Noktaları (Gönderdiğin Şifreler Tam Buraya İşlendi)
+        const SUPABASE_URL = 'https://mnbqkmfxntxiafrnvzxm.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_QjcsQ_0oG-qHAM3FEQK8KQ_Rl_0BkLe';
+        
+        // Bağlantıyı kilitlenmeyi önleyecek şekilde izole ederek başlatıyoruz
+        const _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         let seciliMod = 'nakit';
         let simInterval;
 
@@ -251,6 +259,20 @@
             sistemiSifirla();
         }
 
+        // Veriyi Arka Planda Supabase Veritabanına Gönderen Fonksiyon
+        async function veritabaninaKaydet(urun, bütce, modEtiketi) {
+            try {
+                await _supabaseClient
+                    .from('Takas')
+                    .insert([
+                        { urun_adi: urun, hedef_butce: bütce, mod: modEtiketi }
+                    ]);
+                console.log("Veri başarıyla Supabase bulutuna işlendi.");
+            } catch (err) {
+                console.error("Bulut veri tabanı bağlantı pürüzü:", err);
+            }
+        }
+
         function ihaleBaslat() {
             const urun = document.getElementById('urun-adi').value || "Belirtilmeyen Ürün/Hizmet";
             let bütce = parseFloat(document.getElementById('hedef-butce').value);
@@ -259,6 +281,9 @@
                 alert("Lütfen geçerli bir hedef bütçe girin lider!");
                 return;
             }
+
+            // Butona basıldığı an veriyi arka planda sessizce Supabase'e gönderiyoruz
+            veritabaninaKaydet(urun, bütce, modEtiketiGetir());
 
             const simKutusu = document.getElementById('sim-kutusu');
             simKutusu.style.display = "block";
@@ -273,7 +298,7 @@
             clearInterval(simInterval);
             simInterval = setInterval(() => {
                 sayac++;
-                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02)); // %2 ile %6 arası indirim
+                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02));
                 mevcutFiyat -= indirim;
                 
                 let rastgeleFirma = firmalar[Math.floor(Math.random() * firmalar.length)];
