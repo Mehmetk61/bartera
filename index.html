@@ -226,11 +226,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Supabase Bağlantı Noktaları (Gönderdiğin Şifreler Tam Buraya İşlendi)
+        // Supabase Bağlantı Parametreleri (Doğrulanmış ve Eksiksiz)
         const SUPABASE_URL = 'https://mnbqkmfxntxiafrnvzxm.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_QjcsQ_0oG-qHAM3FEQK8KQ_Rl_0BkLe';
         
-        // Bağlantıyı kilitlenmeyi önleyecek şekilde izole ederek başlatıyoruz
+        // Supabase istemcisini güvenli modda başlatıyoruz
         const _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let seciliMod = 'nakit';
@@ -259,17 +259,22 @@
             sistemiSifirla();
         }
 
-        // Veriyi Arka Planda Supabase Veritabanına Gönderen Fonksiyon
+        // Veriyi Asenkron Olarak Arka Planda Supabase'e Uçuran Fonksiyon
         async function veritabaninaKaydet(urun, bütce, modEtiketi) {
             try {
-                await _supabaseClient
+                const { error } = await _supabaseClient
                     .from('Takas')
                     .insert([
                         { urun_adi: urun, hedef_butce: bütce, mod: modEtiketi }
                     ]);
-                console.log("Veri başarıyla Supabase bulutuna işlendi.");
+                
+                if(error) {
+                    console.error("Supabase Kayıt Hatası:", error.message);
+                } else {
+                    console.log("İhale verisi başarıyla buluta işlendi!");
+                }
             } catch (err) {
-                console.error("Bulut veri tabanı bağlantı pürüzü:", err);
+                console.error("Bağlantı Hatası:", err);
             }
         }
 
@@ -282,7 +287,7 @@
                 return;
             }
 
-            // Butona basıldığı an veriyi arka planda sessizce Supabase'e gönderiyoruz
+            // Butona tıklandığı an veriyi sessizce arka planda buluta gönderiyoruz
             veritabaninaKaydet(urun, bütce, modEtiketiGetir());
 
             const simKutusu = document.getElementById('sim-kutusu');
@@ -298,7 +303,7 @@
             clearInterval(simInterval);
             simInterval = setInterval(() => {
                 sayac++;
-                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02));
+                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02)); // %2-%6 indirim
                 mevcutFiyat -= indirim;
                 
                 let rastgeleFirma = firmalar[Math.floor(Math.random() * firmalar.length)];
