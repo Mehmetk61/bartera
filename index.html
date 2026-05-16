@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARTERA - Global Likidite Borsası</title>
+    <style>
+        /* Premium FinTech Tema Altyapısı */
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+            color: #f8fafc;
+            margin: 0;
+            padding: 50px 20px;
+            text-align: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        h1 {
+            color: #3b82f6;
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin: 0 0 5px 0;
+            background: linear-gradient(to right, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .slogan {
+            font-size: 1.3rem;
+            color: #10b981;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 45px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+        .tab-btn {
+            background-color: rgba(51, 65, 85, 0.5);
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px 28px;
+            font-size: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+        .tab-btn:hover {
+            background-color: rgba(71, 85, 105, 0.8);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .special-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #0f172a;
+            border: none;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+        .special-btn:hover {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #0f172a;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            transform: translateY(-2px);
+        }
+        .ihale-alani {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: left;
+            margin-top: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ihale-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .ihale-header h3 {
+            color: #f59e0b;
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        .teklif-listesi {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .teklif-item {
+            background: rgba(30, 41, 59, 0.4);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            border-right: 1px solid rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+        .clear-btn {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .clear-btn:hover {
+            background-color: rgba(239, 68, 68, 0.4);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>BARTERA</h1>
+        <div class="slogan">"Paran Yoksa, Değerin Var!"</div>
+        
+        <div class="tabs">
+            <button class="tab-btn" onclick="alert('Mal/Hizmet havuzu yakında açılacak.')">Mal / Hizmet Arz Et</button>
+            <button class="tab-btn" onclick="alert('Barter borsası havuzu yükleniyor.')">Barter Havuzu</button>
+            <button class="tab-btn special-btn" onclick="ihaleBaslat()">💰 NAKİT / EMTİAM VAR</button>
+        </div>
+
+        <div class="ihale-alani">
+            <div class="ihale-header">
+                <h3>📊 Bartera Merkezi Veri Deposu</h3>
+                <button class="clear-btn" onclick="hafizayiTemizle()">Hafızayı Sıfırla</button>
+            </div>
+            <p id="ihaleBaslik" style="color: #94a3b8; font-size: 1rem; margin-bottom: 20px;">Sistem aktif. Yapılan tüm likidite ihaleleri ve esnaf teklifleri aşağıda kalıcı olarak saklanır.</p>
+            
+            <div id="teklifler" class="teklif-listesi">
+                <!-- Veriler buraya akacak -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            verileriEkranaBas();
+        };
+
+        function ihaleBaslat() {
+            var miktar = prompt("Sisteme sunmak istediğiniz Nakit veya Emtia miktarını girin:", "5000 TL");
+            
+            if (miktar != null && miktar != "") {
+                var yeniTeklifler = [
+                    "<strong>[" + miktar + " İhalesi] - [Esnaf]:</strong> Normal değeri " + (parseInt(miktar)*2 || 10000) + " TL olan tekstil stoğunu vermeyi kabul etti.",
+                    "<strong>[" + miktar + " İhalesi] - [Eğitmen]:</strong> Bu nakit karşılığında 25 saatlik özel uzmanlık dersi tanımladı.",
+                    "<strong>[" + miktar + " İhalesi] - [Otel]:</strong> Hafta içi atıl kontenjandan 3 gecelik VIP konaklama sözü verdi."
+                ];
+
+                var eskiKayıtlar = JSON.parse(localStorage.getItem("bartera_verileri")) || [];
+                var guncelKayitlar = eskiKayıtlar.concat(yeniTeklifler);
+                
+                localStorage.setItem("bartera_verileri", JSON.stringify(guncelKayitlar));
+                verileriEkranaBas();
+            }
+        }
+
+        function verileriEkranaBas() {
+            var kayıtlar = JSON.parse(localStorage.getItem("bartera_verileri")) || [];
+            var kutu = document.getElementById('teklifler');
+            kutu.innerHTML = "";
+            
+            if(kayıtlar.length === 0) {
+                kutu.innerHTML = "<p style='color:#64748b; text-align:center; padding: 20px;'>Henüz verilmiş bir likidite teklifi yok. Turuncu butona basarak ilk ihaleyi başlatın!</p>";
+            } else {
+                for (var i = kayıtlar.length - 1; i >= 0; i--) {
+                    kutu.innerHTML += "<div class='teklif-item'>" + kayıtlar[i] + "</div>";
+                }
+            }
+        }
+
+        function hafizayiTemizle() {
+            if(confirm("Veri tabanındaki tüm kalıcı ihale kayıtlarını silmek istediğinize emin misiniz?")) {
+                localStorage.removeItem("bartera_verileri");
+                verileriEkranaBas();
+            }
+        }
+    </script>
+
+</body>
+</html>
