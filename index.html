@@ -57,8 +57,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
-        const SUPABASE_URL = "https://wzofshfawbfeghbftbya.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6b2ZzaGZhd2JmZWdoYmZ0YnlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5NjYxNDYsImV4cCI6MjA1NzU0MjE0Nn0.iXvWlI5f7M_yOqGisN9O-YfA2g7C_74X7X06jR-1f2s";
+        const SUPABASE_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
+        
+        // Kopyaladığın taze Publishable Key buraya entegre edildi lider
+        const SUPABASE_ANON_KEY = "sb_publishable_QjcsQzI2YjgtNThmMS00MGZkLTlhMmUtYmNhNTllMDFmMTMwOjhmZmY5NjUwNmM3YzA4NmUzMGIzOTkxOGU3MTVkMjE3NjRjYTRkNDRhMWE5MGYyOWRmNDg4NzI4NmVkNDBiOTU=";
 
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -75,13 +77,11 @@
             logStream.scrollTop = logStream.scrollHeight;
         }
 
-        // 🎨 Ekrana Teklif Basma Fonksiyonu (Sütun isimlerine göre dinamik)
         function ekranaTeklifEkle(teklif, basaEkle = true) {
             if(teklifStream.innerHTML.includes("Henüz canlı teklif girişi yapılmadı") || teklifStream.innerHTML.includes("Teklifler yükleniyor")) {
                 teklifStream.innerHTML = "";
             }
 
-            // Tam olarak şemandaki sütun isimleri ile eşleştirildi
             const veren = teklif.teklif_veren || 'Anonim Tedarikçi';
             const fiyat = teklif.teklif_fiyati ? Number(teklif.teklif_fiyati).toLocaleString('tr-TR') : '0';
             const ihaleId = teklif.ihale_id || '-';
@@ -100,7 +100,6 @@
             }
         }
 
-        // 📥 Mevcut Teklifleri Çekme Fonksiyonu
         async function mevcutTeklifleriGetir() {
             try {
                 const { data, error } = await supabase
@@ -113,18 +112,17 @@
                 if (data && data.length > 0) {
                     teklifStream.innerHTML = "";
                     data.forEach(teklif => ekranaTeklifEkle(teklif, false));
-                    addLog(`📊 Veritabanındaki güncel ${data.length} teklif başarıyla listelendi.`, 'info');
+                    addLog("📊 Veritabanındaki güncel teklifler başarıyla listelendi.", "info");
                 } else {
                     teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif girişi yapılmadı...</div>';
                 }
             } catch (err) {
                 console.error("Çekim hatası:", err);
-                addLog(`Bağlantı sağlandı ancak veri bulunamadı.`, 'info');
+                addLog("Bağlantı sağlandı ancak veriler okunamadı.", "info");
                 teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif yok...</div>';
             }
         }
 
-        // ⚡ Formu Gönderip Köprüye Atma
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const urun_adi = document.getElementById('urunAdi').value;
@@ -137,7 +135,7 @@
                 const response = await fetch(KOPRU_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ urun_adi, hedef_butce, mod })
+                    body: JSON.stringify({ urun_adi, hedef_butce: mod === 'Nakit/Emtia' ? hedef_butce : 0, mod })
                 });
 
                 if (response.ok) {
@@ -151,7 +149,6 @@
             }
         });
 
-        // ⚡ TABLO ADI DUYARLI REALTIME MOTORU
         supabase
             .channel('public:Teklifler_Akisi')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Teklifler' }, (payload) => {
@@ -160,11 +157,8 @@
                 ekranaTeklifEkle(yeniTeklif, true);
                 addLog(`🔔 <b>CANLI VERİ:</b> ${Number(yeniTeklif.teklif_fiyati).toLocaleString('tr-TR')} ₺ yeni teklif düştü!`, 'success');
             })
-            .subscribe((status) => {
-                console.log("Realtime Durumu:", status);
-            });
+            .subscribe();
 
-        // Başlangıçta listele
         mevcutTeklifleriGetir();
     </script>
 </body>
