@@ -13,6 +13,7 @@
             --text-light: #f8f9fa;
             --text-muted: #8da2bb;
             --success-green: #2ec4b6;
+            --border-color: #223152;
         }
 
         * {
@@ -26,326 +27,229 @@
         body {
             background-color: var(--bg-dark);
             color: var(--text-light);
-            padding: 15px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            padding: 20px;
         }
 
         header {
             text-align: center;
-            padding: 10px 0;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 1200px;
         }
 
         header h1 {
             color: var(--accent-blue);
-            font-size: 2rem;
-            letter-spacing: 2px;
-            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
         }
 
         header p {
             color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         .panel {
             background-color: var(--panel-bg);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .panel-title {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            margin-bottom: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .grid-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .btn-main {
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid var(--accent-blue);
-            color: var(--text-light);
-            padding: 15px 10px;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            text-align: center;
+            padding: 25px;
         }
 
-        .btn-main.active {
-            background: var(--accent-blue);
-            color: var(--bg-dark);
-            box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
+        .panel h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
+            margin-bottom: 8px;
             color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 6px;
+            font-size: 0.9rem;
         }
 
-        .form-control {
+        .form-group input, .form-group select {
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 12px;
-            border-radius: 8px;
-            color: white;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-light);
             font-size: 1rem;
             outline: none;
+            transition: border-color 0.3s;
         }
 
-        .form-control:focus {
-            border-color: var(--accent-orange);
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--accent-blue);
         }
 
-        .btn-action {
+        button.btn-primary {
             width: 100%;
-            background: linear-gradient(135deg, var(--accent-orange), #ff4500);
-            border: none;
-            color: white;
             padding: 14px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .simulation-box {
-            display: none;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 15px;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-
-        .log-entry {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .badge-takas {
-            background-color: var(--success-green);
-            color: var(--bg-dark);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.75rem;
-        }
-
-        .btn-reset {
-            background: transparent;
-            border: 1px dashed var(--text-muted);
-            color: var(--text-muted);
-            padding: 8px;
+            background-color: var(--accent-orange);
+            border: none;
             border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 0.8rem;
-            width: 100%;
-            margin-top: 15px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button.btn-primary:hover {
+            background-color: #e0531f;
+        }
+
+        .live-stream {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            height: 320px;
+            overflow-y: auto;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+        }
+
+        .stream-item {
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #1a2642;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .stream-success { color: var(--success-green); }
+        .stream-info { color: var(--accent-blue); }
+        .stream-time { color: var(--text-muted); font-size: 0.8rem; margin-right: 5px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>BARTERA</h1>
-            <p>Geleceğin Ticaret ve Tersine İhale Ekosistemi</p>
-        </header>
+    <header>
+        <h1>BARTERA</h1>
+        <p>Akıllı Takas, Barter ve Tersine İhale Altyapısı</p>
+    </header>
 
+    <div class="main-container">
         <div class="panel">
-            <div class="panel-title">1. İşlem Modülünü Seçin</div>
-            <div class="grid-buttons">
-                <div class="btn-main active" id="mod-nakit" onclick="selectMod('nakit')">Nakit / Emtia (Aktif)</div>
-                <div class="btn-main" id="mod-havuz" onclick="selectMod('havuz')">Barter Havuzu (Aktif)</div>
-                <div class="btn-main" id="mod-mal" onclick="selectMod('mal')">Mal / Hizmet Al (Aktif)</div>
-                <div class="btn-main" id="mod-hizmet" onclick="selectMod('hizmet')">Mal / Hizmet Sat (Aktif)</div>
-            </div>
+            <h2>Tersine İhale / Takas Başlat</h2>
+            <form id="ihaleForm">
+                <div class="form-group">
+                    <label for="urunAdi">Talep Edilen Mal / Hizmet</label>
+                    <input type="text" id="urunAdi" placeholder="Örn: 100 Adet Ofis Koltuğu" required>
+                </div>
+                <div class="form-group">
+                    <label for="hedefButce">Maksimum Hedef Bütçe (₺)</label>
+                    <input type="number" id="hedefButce" placeholder="Örn: 150000" required>
+                </div>
+                <div class="form-group">
+                    <label for="islemModu">İşlem Modülü</label>
+                    <select id="islemModu">
+                        <option value="Nakit/Emtia">Nakit / Emtia (Tersine İhale)</option>
+                        <option value="TamTakas">Tam Takas (Barter)</option>
+                        <option value="KismiTakas">Kısmi Takas + Nakit</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Tersine İhale Başlat</button>
+            </form>
         </div>
 
-        <div class="panel" id="ihale-paneli">
-            <div class="panel-title" id="form-baslik">Nakit / Emtia Tersine İhale Girişi</div>
-            
-            <div class="form-group">
-                <label for="urun-adi">Talep Edilen Mal / Hizmet:</label>
-                <input type="text" id="urun-adi" class="form-control" placeholder="Örn: 100 Adet Ofis Koltuğu">
+        <div class="panel">
+            <h2>Canlı Veritabanı Akışı (Realtime)</h2>
+            <div class="live-stream" id="logStream">
+                <div class="stream-item stream-info">
+                    <span class="stream-time">[Sistem]</span> Canlı dinleme başlatıldı. Veri bekleniyor...
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="hedef-butce">Maksimum Hedef Bütçe (TL):</label>
-                <input type="number" id="hedef-butce" class="form-control" placeholder="Örn: 150000">
-            </div>
-
-            <button class="btn-action" onclick="ihaleBaslat()">Tersine İhale Başlat</button>
-
-            <div class="simulation-box" id="sim-kutusu"></div>
-            
-            <button class="btn-reset" id="reset-btn" style="display:none;" onclick="sistemiSifirla()">Sistemi ve Hafızayı Sıfırla</button>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://mnbqkmfxntxiafrnvzxm.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_QjcsQ_0oG-qHAM3FEQK8KQ_Rl_0BkLe';
-        
-        const _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Supabase Bağlantı Bilgileri
+        const SUPABASE_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
+        // Anon KEY değeriniz kodunuza gömülü kalacaktır
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZ4bnR4aWFmcm52enhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTIzMTMsImV4cCI6MjA2MDg4ODMxM30.bU9pWkYwYkJndm5jM1I0NEd4cW1hZExiX2ExSnp2U3dYQmdzX3F6bF96NA";
 
-        let seciliMod = 'nakit';
-        let simInterval;
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        function selectMod(mod) {
-            seciliMod = mod;
-            document.querySelectorAll('.btn-main').forEach(btn => btn.classList.remove('active'));
+        const ihaleForm = document.getElementById('ihaleForm');
+        const logStream = document.getElementById('logStream');
+
+        // Ekrana log yazdırma fonksiyonu
+        function addLog(message, type = 'info') {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('tr-TR');
+            const item = document.createElement('div');
+            item.className = `stream-item stream-${type}`;
+            item.innerHTML = `<span class="stream-time">[${timeStr}]</span> ${message}`;
+            logStream.appendChild(item);
+            logStream.scrollTop = logStream.scrollHeight;
+        }
+
+        // FORM GÖNDERME (Veritabanına Ekleme)
+        ihaleForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
             
-            let modBaslik = "";
-            if(mod === 'nakit') {
-                document.getElementById('mod-nakit').classList.add('active');
-                modBaslik = "Nakit / Emtia Tersine İhale Girişi";
-            } else if(mod === 'havuz') {
-                document.getElementById('mod-havuz').classList.add('active');
-                modBaslik = "Barter Havuzu Akıllı Takas Girişi";
-            } else if(mod === 'mal') {
-                document.getElementById('mod-mal').classList.add('active');
-                modBaslik = "Mal / Hizmet Alım İhale Girişi";
-            } else if(mod === 'hizmet') {
-                document.getElementById('mod-hizmet').classList.add('active');
-                modBaslik = "Mal / Hizmet Satış Teklif Girişi";
+            const urun_adi = document.getElementById('urunAdi').value;
+            const hedef_butce = parseInt(document.getElementById('hedefButce').value);
+            const mod = document.getElementById('islemModu').value;
+
+            addLog(`Veri gönderiliyor: ${urun_adi}...`, 'info');
+
+            const { data, error } = await supabase
+                .from('Takas')
+                .insert([{ urun_adi, hedef_butce, mod }]);
+
+            if (error) {
+                addLog(`Hata oluştu: ${error.message}`, 'info');
+                console.error(error);
+            } else {
+                addLog(`İhale başarıyla sisteme gönderildi!`, 'success');
+                ihaleForm.reset();
             }
-            
-            document.getElementById('form-baslik').innerText = modBaslik;
-            sistemiSifirla();
-        }
+        });
 
-        async function veritabaninaKaydet(urun, bütce, modEtiketi) {
-            try {
-                const { error } = await _supabaseClient
-                    .from('Takas')
-                    .insert([
-                        { urun_adi: urun, hedef_butce: bütce, mod: modEtiketi }
-                    ]);
-                
-                if(error) {
-                    console.error("Supabase Kayıt Hatası:", error.message);
-                } else {
-                    console.log("İhale verisi başarıyla buluta işlendi!");
-                }
-            } catch (err) {
-                console.error("Bağlantı Hatası:", err);
-            }
-        }
-
-        function ihaleBaslat() {
-            const urun = document.getElementById('urun-adi').value || "Belirtilmeyen Ürün/Hizmet";
-            let bütce = parseFloat(document.getElementById('hedef-butce').value);
-
-            if(!bütce || bütce <= 0) {
-                alert("Lütfen geçerli bir hedef bütçe girin lider!");
-                return;
-            }
-
-            veritabaninaKaydet(urun, bütce, modEtiketiGetir());
-
-            const simKutusu = document.getElementById('sim-kutusu');
-            simKutusu.style.display = "block";
-            simKutusu.innerHTML = `<div class="log-entry" style="color:var(--accent-blue)">[SİSTEM] ${modEtiketiGetir()} İhalesi Başlatıldı...</div>`;
-            
-            document.getElementById('reset-btn').style.display = "block";
-
-            let sayac = 0;
-            let mevcutFiyat = bütce;
-            const firmalar = ["Asya Ticaret", "Kamiloğlu Lojistik", "Avrasya Ltd.", "TeknoGlobal", "Ege Tedarik"];
-
-            clearInterval(simInterval);
-            simInterval = setInterval(() => {
-                sayac++;
-                let indirim = Math.floor(mevcutFiyat * (Math.random() * 0.04 + 0.02));
-                mevcutFiyat -= indirim;
-                
-                let rastgeleFirma = firmalar[Math.floor(Math.random() * firmalar.length)];
-                
-                let log = document.createElement('div');
-                log.className = 'log-entry';
-                
-                if(sayac === 3 || sayac === 5) {
-                    log.innerHTML = `<span>⚡ ${rastgeleFirma}: <b>${mevcutFiyat.toLocaleString('tr-TR')} TL</b></span> <span class="badge-takas">%50 TAKAS İMKANI</span>`;
-                } else {
-                    log.innerHTML = `<span>📉 ${rastgeleFirma}: ${mevcutFiyat.toLocaleString('tr-TR')} TL</span>`;
-                }
-                
-                simKutusu.appendChild(log);
-                simKutusu.scrollTop = simKutusu.scrollHeight;
-
-                if(sayac >= 6) {
-                    clearInterval(simInterval);
-                    let sonuc = document.createElement('div');
-                    sonuc.className = 'log-entry';
-                    sonuc.style.color = 'var(--success-green)';
-                    sonuc.style.fontWeight = 'bold';
-                    sonuc.style.marginTop = '10px';
-                    sonuc.innerHTML = `<span>🏆 EN UYGUN TEKLİF: ${mevcutFiyat.toLocaleString('tr-TR')} TL (Eşleşme Sağlandı!)</span>`;
-                    simKutusu.appendChild(sonuc);
-                    simKutusu.scrollTop = simKutusu.scrollHeight;
-                }
-            }, 1500);
-        }
-
-        function modEtiketiGetir() {
-            if(seciliMod === 'nakit') return "Nakit/Emtia";
-            if(seciliMod === 'havuz') return "Barter Havuzu";
-            if(seciliMod === 'mal') return "Mal/Hizmet Alım";
-            return "Mal/Hizmet Satış";
-        }
-
-        function sistemiSifirla() {
-            clearInterval(simInterval);
-            document.getElementById('urun-adi').value = "";
-            document.getElementById('hedef-butce').value = "";
-            const simKutusu = document.getElementById('sim-kutusu');
-            simKutusu.innerHTML = "";
-            simKutusu.style.display = "none";
-            document.getElementById('reset-btn').style.display = "none";
-        }
+        // SUPABASE REALTIME (Canlı Veri Dinleme)
+        supabase
+            .channel('public:Takas')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Takas' }, payload => {
+                const yeniVeri = payload.new;
+                addLog(`🔥 <b>YENİ İHALE DÜŞTÜ!</b> Mod: ${yeniVeri.mod} | Ürün: ${yeniVeri.urun_adi} | Bütçe: ₺${yeniVeri.hedef_butce}`, 'success');
+            })
+            .subscribe();
     </script>
 </body>
 </html>
