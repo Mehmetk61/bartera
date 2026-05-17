@@ -198,6 +198,7 @@
     </div>
 
     <script>
+        // Supabase Kurulumu (Sadece tek bir kez tanımlandı)
         const SUPABASE_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZ4bnR4aWFmcm52enhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTIzMTMsImV4cCI6MjA2MDg4ODMxM30.bU9pWkYwYkJndm5jM1I0NEd4cW1hZExiX2ExSnp2U3dYQmdzX3F6bF96NA";
 
@@ -229,7 +230,7 @@
             const { data, error } = await supabase
                 .from('Takas')
                 .insert([{ urun_adi, hedef_butce, mod }])
-                .select(); // Takılmayı çözen kritik düzeltme
+                .select(); 
 
             if (error) {
                 addLog(`Hata oluştu: ${error.message}`, 'info');
