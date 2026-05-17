@@ -54,15 +54,11 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
-        const SUPABASE_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_QjcsQzI2YjgtNThmMS00MGZkLTlhMmUtYmNhNTllMDFmMTMwOjhmZmY5NjUwNmM3YzA4NmUzMGIzOTkxOGU3MTVkMjE3NjRjYTRkNDRhMWE5MGYyOWRmNDg4NzI4NmVkNDBiOTU=";
-
-        // Supabase Client Bağlantısı
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+        // Supabase REST API url adresi üzerinden doğrudan şifresiz veri çekme
+        const DATA_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Teklifler?select=*&order=created_at.desc";
+        
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
         const teklifStream = document.getElementById('teklifStream');
@@ -99,34 +95,31 @@
             }
         }
 
-        // Mevcut teklifleri veritabanından çekme fonksiyonu
         async function mevcutTeklifleriGetir() {
             try {
-                const { data, error } = await supabase
-                    .from('Teklifler')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
+                const response = await fetch(DATA_URL);
+                if (!response.ok) throw new Error("Veri çekilemedi");
+                
+                const data = await response.json();
 
                 if (data && data.length > 0) {
                     teklifStream.innerHTML = "";
                     data.forEach(teklif => ekranaTeklifEkle(teklif, false));
-                    addLog("📊 Güncel teklifler veritabanından çekildi ve listelendi.", "info");
+                    addLog("📊 Veritabanındaki güncel teklifler listelendi.", "success");
                 } else {
                     teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif girişi yapılmadı...</div>';
                 }
             } catch (err) {
                 console.error("Hata:", err);
-                addLog("Bağlantı açık. Veri akışı bekleniyor...", "info");
-                teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Canlı veri girişi bekleniyor...</div>';
+                addLog("Veritabanı bağlantısı açık, yeni veri akışı bekleniyor.", "info");
+                teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz veri girişi bulunmuyor.</div>';
             }
         }
 
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const urun_adi = document.getElementById('urunAdi').value;
-            const hedef_butce = parseInt(document.getElementById('hedefButce').value);
+            const hedon_butce = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
             addLog(`Veri güvenli köprüye aktarılıyor...`, 'info');
@@ -135,12 +128,13 @@
                 const response = await fetch(KOPRU_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ urun_adi, hedef_butce: mod === 'Nakit/Emtia' ? hedef_butce : 0, mod })
+                    body: JSON.stringify({ urun_adi, hedef_butce: mod === 'Nakit/Emtia' ? hedon_butce : 0, mod })
                 });
 
                 if (response.ok) {
-                    addLog(`🎉 <b>BAŞARILI:</b> Veri güvenli şekilde Make köprüsüne ulaştı!`, 'success');
+                    addLog(`🎉 <b>BAŞARILI:</b> Köprü tetiklendi!`, 'success');
                     ihaleForm.reset();
+                    setTimeout(mevcutTeklifleriGetir, 2000);
                 } else {
                     addLog(`Köprü Hatası (HTTP ${response.status})`, 'info');
                 }
@@ -149,18 +143,9 @@
             }
         });
 
-        // Supabase Realtime - Canlı Değişim Dinleyicisi
-        supabase
-            .channel('public:Teklifler')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Teklifler' }, (payload) => {
-                const yeniTeklif = payload.new;
-                ekranaTeklifEkle(yeniTeklif, true);
-                addLog(`🔔 <b>CANLI VERİ:</b> ${Number(yeniTeklif.teklif_fiyati).toLocaleString('tr-TR')} ₺ yeni teklif düştü!`, 'success');
-            })
-            .subscribe();
-
-        // Sayfa açılışında ilk yükleme
+        // Sayfada arka planda her 5 saniyede bir verileri yenileme döngüsü
         mevcutTeklifleriGetir();
+        setInterval(mevcutTeklifleriGetir, 5000);
     </script>
 </body>
 </html>
