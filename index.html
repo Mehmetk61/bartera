@@ -198,11 +198,11 @@
     </div>
 
     <script>
-        // Supabase Kurulumu (Sadece tek bir kez tanımlandı)
-        const SUPABASE_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZ4bnR4aWFmcm52enhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTIzMTMsImV4cCI6MjA2MDg4ODMxM30.bU9pWkYwYkJndm5jM1I0NEd4cW1hZExiX2ExSnp2U3dYQmdzX3F6bF96NA";
+        // Bağlantı sadece TEK BİR KEZ kuruluyor. Çakışma ihtimali sıfırlandı.
+        const URL_ADRESI = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
+        const ANAHTAR_KODU = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZ4bnR4aWFmcm52enhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTIzMTMsImV4cCI6MjA2MDg4ODMxM30.bU9pWkYwYkJndm5jM1I0NEd4cW1hZExiX2ExSnp2U3dYQmdzX3F6bF96NA";
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const barteraVeritabani = supabase.createClient(URL_ADRESI, ANAHTAR_KODU);
 
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
@@ -217,7 +217,7 @@
             logStream.scrollTop = logStream.scrollHeight;
         }
 
-        // FORM GÖNDERME
+        // VERİ TABANINA SATIR EKLEME SİSTEMİ
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -225,9 +225,9 @@
             const hedef_butce = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
-            addLog(`Veri gönderiliyor: ${urun_adi}...`, 'info');
+            addLog(`Veri havuza gönderiliyor: ${urun_adi}...`, 'info');
 
-            const { data, error } = await supabase
+            const { data, error } = await barteraVeritabani
                 .from('Takas')
                 .insert([{ urun_adi, hedef_butce, mod }])
                 .select(); 
@@ -240,8 +240,8 @@
             }
         });
 
-        // CANLI VERİ DİNLEME (REALTIME)
-        supabase
+        // CANLI REALTIME AKIŞ SİSTEMİ
+        barteraVeritabani
             .channel('public:Takas')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Takas' }, payload => {
                 const yeniVeri = payload.new;
