@@ -198,11 +198,13 @@
     </div>
 
     <script>
-        // Bağlantı sadece TEK BİR KEZ kuruluyor. Çakışma ihtimali sıfırlandı.
+        // Supabase Bağlantısı
         const URL_ADRESI = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
         const ANAHTAR_KODU = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZ4bnR4aWFmcm52enhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTIzMTMsImV4cCI6MjA2MDg4ODMxM30.bU9pWkYwYkJndm5jM1I0NEd4cW1hZExiX2ExSnp2U3dYQmdzX3F6bF96NA";
 
-        const barteraVeritabani = supabase.createClient(URL_ADRESI, ANAHTAR_KODU);
+        const barteraVeritabani = supabase.createClient(URL_ADRESI, ANAHTAR_KODU, {
+            auth: { persistSession: false }
+        });
 
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
