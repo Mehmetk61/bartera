@@ -191,16 +191,17 @@
             <h2>Canlı Veritabanı Akışı (Realtime)</h2>
             <div class="live-stream" id="logStream">
                 <div class="stream-item stream-info">
-                    <span class="stream-time">[Sistem]</span> Canlı dinleme aktif. Veri bekleniyor...
+                    <span class="stream-time">[Sistem]</span> Canlı dinleme başlatıldı. Veri bekleniyor...
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Supabase Bağlantısı
+        // Supabase Kurulumu
         const URL_ADRESI = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
-        const ANAHTAR_KODU = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZ4bnR4aWFmcm52enhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTIzMTMsImV4cCI6MjA2MDg4ODMxM30.bU9pWkYwYkJndm5jM1I0NEd4cW1hZExiX2ExSnp2U3dYQmdzX3F6bF96NA";
+        // Kopyaladığın sb_publishable_ ile başlayan anahtarı iki tırnak arasına yapıştır lider:
+        const ANAHTAR_KODU = "BURAYA_KOPYALADIGIN_PUBLISHABLE_KEYI_YAPISTIR";
 
         const barteraVeritabani = supabase.createClient(URL_ADRESI, ANAHTAR_KODU, {
             auth: { persistSession: false }
