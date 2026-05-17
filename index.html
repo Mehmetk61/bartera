@@ -153,7 +153,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -187,24 +186,18 @@
         </div>
 
         <div class="panel">
-            <h2>Canlı Veritabanı Akışı (Realtime)</h2>
+            <h2>Canlı Veritabanı Akışı (Sistem Günlüğü)</h2>
             <div class="live-stream" id="logStream">
                 <div class="stream-item stream-info">
-                    <span class="stream-time">[Sistem]</span> Canlı dinleme aktif. Veri bekleniyor...
+                    <span class="stream-time">[Sistem]</span> API Kontrolü Tamamlandı. Veri gönderimine hazır.
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // URL ve Gerçek Anahtar Tanımlamaları
-        const VERITABANI_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
-        const VERITABANI_KEY = "sb_publishable_QjcsQ_0oG-qHAM3FEQK8KQ_Rl_0BwYmK-Yv8V0DofI8";
-
-        // Kütüphaneyle çakışmaması için istemciyi "barteraBaglantisi" adıyla benzersiz yapıyoruz
-        const barteraBaglantisi = window.supabase.createClient(VERITABANI_URL, VERITABANI_KEY, {
-            auth: { persistSession: false }
-        });
+        const API_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Takas";
+        const API_KEY = "sb_publishable_QjcsQ_0oG-qHAM3FEQK8KQ_Rl_0BwYmK-Yv8V0DofI8";
 
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
@@ -219,37 +212,39 @@
             logStream.scrollTop = logStream.scrollHeight;
         }
 
-        // VERİ TABANINA VERİ EKLEME
+        // DOĞRUDAN HTTP REST ISTEGI (KÜTÜPHANESİZ GÜVENLİ YÖNTEM)
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const urun_adi = document.getElementById('urunAdi').value;
-            const  hedef_butce = parseInt(document.getElementById('hedefButce').value);
+            const hedef_butce = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
-            addLog(`Veri havuza gönderiliyor: ${urun_adi}...`, 'info');
+            addLog(`Veri güvenli tünelden gönderiliyor: ${urun_adi}...`, 'info');
 
-            const { data, error } = await barteraBaglantisi
-                .from('Takas')
-                .insert([{ urun_adi, hedef_butce, mod }])
-                .select(); 
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': API_KEY,
+                        'Authorization': `Bearer ${API_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({ urun_adi, hedef_butce, mod })
+                });
 
-            if (error) {
-                addLog(`Hata oluştu: ${error.message}`, 'info');
-            } else {
-                addLog(`İhale başarıyla sisteme gönderildi!`, 'success');
-                ihaleForm.reset();
+                if (response.ok) {
+                    addLog(`🎉 <b>BAŞARILI:</b> İhale veritabanı havuzuna başarıyla işlendi!`, 'success');
+                    ihaleForm.reset();
+                } else {
+                    const errData = await response.text();
+                    addLog(`Sunucu Yanıtı Hatası: ${response.status} - ${errData}`, 'info');
+                }
+            } catch (err) {
+                addLog(`Bağlantı Hatası: ${err.message}`, 'info');
             }
         });
-
-        // GERÇEK ZAMANLI (REALTIME) VERİ AKIŞI
-        barteraBaglantisi
-            .channel('public:Takas')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Takas' }, payload => {
-                const yeniVeri = payload.new;
-                addLog(`🔥 <b>YENİ İHALE DÜŞTÜ!</b> Mod: ${yeniVeri.mod} | Ürün: ${yeniVeri.urun_adi} | Bütçe: ₺${yeniVeri.hedef_butce}`, 'success');
-            })
-            .subscribe();
     </script>
 </body>
 </html>
