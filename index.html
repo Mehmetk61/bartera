@@ -34,11 +34,11 @@
         .main-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; max-width: 1200px; }
         @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } }
         
-        .panel { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; display: flex; flex-direction: column; gap: 15px; position: relative; overflow: hidden; min-height: 400px; }
+        .panel { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; display: flex; flex-direction: column; gap: 15px; position: relative; overflow: hidden; min-height: 420px; }
         .panel h2 { font-size: 1.4rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
         
         /* Modallar Perdesi */
-        .auth-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(19, 28, 49, 0.97); backdrop-filter: blur(6px); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px; z-index: 10; padding: 20px; }
+        .auth-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(19, 28, 49, 0.97); backdrop-filter: blur(6px); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; z-index: 10; padding: 20px; }
         .auth-overlay p { color: var(--text-light); font-size: 1.1rem; text-align: center; }
         .panel.unlocked .auth-overlay { display: none !important; }
 
@@ -59,7 +59,7 @@
         .blur-text { filter: blur(4px); background: #223152; color: transparent; border-radius: 4px; padding: 0 5px; user-select: none; }
 
         .code-container { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
-        .code-input { width: 120px; height: 45px; text-align: center; font-size: 1.3rem; font-weight: bold; color: var(--accent-blue); background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; outline: none; }
+        .code-input { width: 140px; height: 45px; text-align: center; font-size: 1.4rem; font-weight: bold; color: var(--accent-blue); background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; outline: none; letter-spacing: 4px; }
     </style>
 </head>
 <body>
@@ -70,8 +70,8 @@
         </div>
         <div class="auth-panel">
             <span id="authStatusText" class="auth-status status-guest">🔴 Misafir Ziyaretçi</span>
-            <button id="headerLoginBtn" class="auth-btn btn-login">Giriş Yap</button>
-            <button id="headerRegisterBtn" class="auth-btn btn-register">Kayıt Ol</button>
+            <button id="headerLoginBtn" class="auth-btn btn-login" onclick="pencereGoster('login')">Giriş Yap</button>
+            <button id="headerRegisterBtn" class="auth-btn btn-register" onclick="pencereGoster('register')">Kayıt Ol</button>
         </div>
     </header>
 
@@ -85,7 +85,7 @@
                     <input type="email" id="loginEmail" value="kamiloglu@holding.com">
                 </div>
                 <button class="btn-primary" onclick="loginTamamla()">Giriş Yap</button>
-                <p style="font-size:0.85rem; color:var(--text-muted);">Hesabınız yok mu? <a href="#" id="toRegisterLink" style="color:var(--accent-blue)">Kayıt Olun</a></p>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Hesabınız yok mu? <span style="color:var(--accent-blue); cursor:pointer; font-weight:bold;" onclick="pencereGoster('register')">Kayıt Olun</span></p>
             </div>
 
             <div class="auth-overlay" id="registerEkrani" style="display: none;">
@@ -103,7 +103,7 @@
                     <input type="text" id="regVergi" placeholder="10 Haneli Vergi No">
                 </div>
                 <button class="btn-primary" style="background-color: var(--accent-blue);" onclick="kayitTetikle()">Kayıt Ol ve Kod Gönder</button>
-                <p style="font-size:0.85rem; color:var(--text-muted);">Zaten üye misiniz? <a href="#" id="toLoginLink" style="color:var(--accent-orange)">Giriş Yapın</a></p>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Zaten üye misiniz? <span style="color:var(--accent-orange); cursor:pointer; font-weight:bold;" onclick="pencereGoster('login')">Giriş Yapın</span></p>
             </div>
 
             <div class="auth-overlay" id="verifyEkrani" style="display: none;">
@@ -115,7 +115,7 @@
                 </div>
 
                 <button class="btn-primary" style="background-color: var(--success-green);" onclick="dogrulamaTamamla()">Kodu Doğrula</button>
-                <p style="font-size:0.85rem; color:var(--text-muted); cursor:pointer; color:var(--accent-blue);" onclick="pencereGoster('register')">⬅ Geri Dön</p>
+                <p style="font-size:0.85rem; color:var(--accent-blue); cursor:pointer;" onclick="pencereGoster('register')">⬅ Geri Dön</p>
             </div>
 
             <h2>Tersine İhale / Takas Başlat</h2>
@@ -165,4 +165,112 @@
             const now = new Date();
             const item = document.createElement('div');
             item.className = `stream-item stream-${type}`;
-            item.innerHTML = `<span class="stream-time">
+            item.innerHTML = `<span class="stream-time">[${now.toLocaleTimeString('tr-TR')}]</span> ${message}`;
+            logStream.appendChild(item);
+            logStream.scrollTop = logStream.scrollHeight;
+        }
+
+        function pencereGoster(hedef) {
+            if(isLoggedIn && hedef !== 'logout') return;
+            
+            loginEkrani.style.display = 'none';
+            registerEkrani.style.display = 'none';
+            verifyEkrani.style.display = 'none';
+
+            if(hedef === 'login') loginEkrani.style.display = 'flex';
+            if(hedef === 'register') registerEkrani.style.display = 'flex';
+            if(hedef === 'verify') verifyEkrani.style.display = 'flex';
+        }
+
+        function kayitTetikle() {
+            const unvan = document.getElementById('regUnvan').value;
+            const email = document.getElementById('regEmail').value;
+            
+            if(!unvan || !email) {
+                alert("Lütfen Şirket Unvanı ve E-Posta alanlarını doldurun.");
+                return;
+            }
+
+            aktifSirketAdi = unvan; 
+            addLog(`📩 Kayıt talebi alındı. Doğrulama kodu e-postaya gönderiliyor...`, 'info');
+            pencereGoster('verify');
+        }
+
+        function dogrulamaTamamla() {
+            const kod = document.getElementById('dogrulamaKodu').value;
+            if(kod === "6161") {
+                addLog(`🛡️ Doğrulama başarılı! Hesap aktif edildi.`, 'success');
+                isLoggedIn = true;
+                uiGuncelle();
+            } else {
+                addLog(`❌ Hatalı doğrulama kodu girildi! Tekrar deneyin.`, 'danger');
+                alert("Hatalı kod! Lütfen ekranda yazan simülasyon kodunu (6161) giriniz.");
+            }
+        }
+
+        function loginTamamla() {
+            aktifSirketAdi = "Kamiloğlu Holding";
+            isLoggedIn = true;
+            uiGuncelle();
+        }
+
+        function uiGuncelle() {
+            if (isLoggedIn) {
+                authStatusText.innerHTML = `🟢 Üye: ${aktifSirketAdi}`;
+                authStatusText.className = "auth-status status-user";
+                headerLoginBtn.innerHTML = "Çıkış Yap";
+                headerLoginBtn.className = "auth-btn btn-logout";
+                headerRegisterBtn.style.display = "none";
+                
+                ihalePaneli.classList.add('unlocked');
+                addLog(`🔐 Oturum açıldı. Hoş geldiniz, ${aktifSirketAdi}!`, "success");
+            } else {
+                authStatusText.innerHTML = "🔴 Misafir Ziyaretçi";
+                authStatusText.className = "auth-status status-guest";
+                headerLoginBtn.innerHTML = "Giriş Yap";
+                headerLoginBtn.className = "auth-btn btn-login";
+                headerRegisterBtn.style.display = "inline-block";
+                
+                ihalePaneli.classList.remove('unlocked');
+                pencereGoster('login');
+            }
+            teklifleriEkranaBas();
+        }
+
+        function cikisYap() {
+            isLoggedIn = false;
+            addLog("Oturum güvenli bir şekilde kapatıldı.", "info");
+            uiGuncelle();
+        }
+
+        function teklifleriEkranaBas() {
+            teklifStream.innerHTML = "";
+            sahteVeritabani.forEach(teklif => {
+                const item = document.createElement('div');
+                item.className = 'teklif-item';
+                
+                const gosterilecekIsim = isLoggedIn 
+                    ? `<b>${teklif.teklif_veren}</b>` 
+                    : `<span class="blur-text">Gizli Firma</span> (Giriş Yapın)`;
+
+                item.innerHTML = `
+                    <span>👤 ${gosterilecekIsim} (İhale ID: ${teklif.ihale_id})</span>
+                    <span class="teklif-fiyat">${teklif.teklif_fiyati.toLocaleString('tr-TR')} ₺</span>
+                `;
+                teklifStream.appendChild(item);
+            });
+        }
+
+        document.getElementById('ihaleForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const urun = document.getElementById('urunAdi').value;
+            const butce = document.getElementById('hedefButce').value;
+            addLog(`🚀 <b>YENİ İHALE:</b> "${urun}" için ${butce} ₺ bütçeli ihale başarıyla başlatıldı!`, 'success');
+            document.getElementById('ihaleForm').reset();
+        });
+
+        // İlk yüklemede çalıştır
+        uiGuncelle();
+    </script>
+</body>
+</html>
