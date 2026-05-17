@@ -189,18 +189,18 @@
             <h2>Canlı Veritabanı Akışı (Sistem Günlüğü)</h2>
             <div class="live-stream" id="logStream">
                 <div class="stream-item stream-info">
-                    <span class="stream-time">[Sistem]</span> Gerçek tünel ve anahtar entegrasyonu tamamlandı. Gönderim bekleniyor.
+                    <span class="stream-time">[Sistem]</span> Gerçek Anon Key ve PostgREST tüneli entegre edildi. İstek bekleniyor.
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Kütüphanesiz, doğrudan PostgREST motoruyla el sıkışan evrensel bağlantı adresin
+        // Supabase RESTful tabanlı PostgREST veritabanı uç noktası
         const API_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Takas";
         
-        // Piksellerden cımbızla çektiğim, sisteminin beklediği asıl Legacy Anon Key
-        const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZudHhpYWZybnZ6eG0iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0Mzk1NDg5NCwiZXhwIjoyMDU5NTMwODk0fQ.f6XWf7wYyOasYtV0gT2S9zS_G-3T2T2T2T2T2T2T2T2";
+        // Panelden getirdiğin eksiksiz ve maskelenmemiş gerçek anahtarın
+        const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZudHhpYWZybnZ6eG0iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc4OTYwMjgwMCwiZXhwIjoyMDk0NTM2MjgwfQ.A8MnKSuf_R32cIkp5VvNAd1io1Z18_6b_AzJ5VjpytA";
 
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
@@ -222,7 +222,7 @@
             const hedef_butce = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
-            addLog(`Güvenli tünelden ana havuza akıtılıyor: ${urun_adi}...`, 'info');
+            addLog(`Veri güvenli hat üzerinden ana havuza gönderiliyor: ${urun_adi}...`, 'info');
 
             try {
                 const response = await fetch(API_URL, {
@@ -237,11 +237,11 @@
                 });
 
                 if (response.ok) {
-                    addLog(`🎉 <b>MÜJDELER OLSUN:</b> Veri kilidi kırıldı! İhale başarıyla havuzuna işlendi!`, 'success');
+                    addLog(`🎉 <b>MÜKEMMEL:</b> Kilit kırıldı! Veri başarıyla veritabanı tablosuna işlendi.`, 'success');
                     ihaleForm.reset();
                 } else {
                     const errData = await response.text();
-                    addLog(`Sunucu Hatası: ${response.status} - ${errData}`, 'info');
+                    addLog(`Sunucu Yanıtı Hatası: ${response.status} - ${errData}`, 'info');
                 }
             } catch (err) {
                 addLog(`Bağlantı Hatası: ${err.message}`, 'info');
