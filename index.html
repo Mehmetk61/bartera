@@ -120,16 +120,27 @@
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const urun_adi = document.getElementById('urunAdi').value;
-            const hedef_butce = parseInt(document.getElementById('hedefButce').value);
+            const bütçe_değeri = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
             addLog(`Veri güvenli köprüye aktarılıyor...`, 'info');
+
+            // Make senaryosundaki olası tüm isimlendirme varyasyonlarını karşılayan genişletilmiş veri paketi
+            const veriPaketi = { 
+                urun_adi: urun_adi,
+                urunAdi: urun_adi,
+                hedef_butce: mod === 'Nakit/Emtia' ? bütçe_değeri : 0,
+                hedefButce: mod === 'Nakit/Emtia' ? bütçe_değeri : 0,
+                butce: mod === 'Nakit/Emtia' ? bütçe_değeri : 0,
+                mod: mod,
+                islemModu: mod
+            };
 
             try {
                 const response = await fetch(KOPRU_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ urun_adi, hedef_butce: mod === 'Nakit/Emtia' ? hedef_butce : 0, mod })
+                    body: JSON.stringify(veriPaketi)
                 });
 
                 if (response.ok) {
