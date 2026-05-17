@@ -189,17 +189,17 @@
             <h2>Canlı Veritabanı Akışı (Sistem Günlüğü)</h2>
             <div class="live-stream" id="logStream">
                 <div class="stream-item stream-info">
-                    <span class="stream-time">[Sistem]</span> Gerçek Anon Key ve PostgREST tüneli entegre edildi. İstek bekleniyor.
+                    <span class="stream-time">[Sistem]</span> Gerçek Anon Key başarıyla yerleştirildi. Gönderim bekleniyor.
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Supabase RESTful tabanlı PostgREST veritabanı uç noktası
+        // Supabase REST uç noktası
         const API_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Takas";
         
-        // Panelden getirdiğin eksiksiz ve maskelenmemiş gerçek anahtarın
+        // Son verdiğin eksiksiz ve orijinal el değmemiş anahtar
         const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZudHhpYWZybnZ6eG0iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc4OTYwMjgwMCwiZXhwIjoyMDk0NTM2MjgwfQ.A8MnKSuf_R32cIkp5VvNAd1io1Z18_6b_AzJ5VjpytA";
 
         const ihaleForm = document.getElementById('ihaleForm');
@@ -222,7 +222,7 @@
             const hedef_butce = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
-            addLog(`Veri güvenli hat üzerinden ana havuza gönderiliyor: ${urun_adi}...`, 'info');
+            addLog(`Veri ana havuza akıtılıyor: ${urun_adi}...`, 'info');
 
             try {
                 const response = await fetch(API_URL, {
@@ -237,11 +237,11 @@
                 });
 
                 if (response.ok) {
-                    addLog(`🎉 <b>MÜKEMMEL:</b> Kilit kırıldı! Veri başarıyla veritabanı tablosuna işlendi.`, 'success');
+                    addLog(`🎉 <b>BAŞARILI:</b> Tünel açıldı! Veri sisteme işlendi ve havuz doldu!`, 'success');
                     ihaleForm.reset();
                 } else {
                     const errData = await response.text();
-                    addLog(`Sunucu Yanıtı Hatası: ${response.status} - ${errData}`, 'info');
+                    addLog(`Sunucu Yanıtı: ${response.status} - ${errData}`, 'info');
                 }
             } catch (err) {
                 addLog(`Bağlantı Hatası: ${err.message}`, 'info');
