@@ -189,18 +189,18 @@
             <h2>Canlı Veritabanı Akışı (Sistem Günlüğü)</h2>
             <div class="live-stream" id="logStream">
                 <div class="stream-item stream-info">
-                    <span class="stream-time">[Sistem]</span> Gerçek Anon Key başarıyla yerleştirildi. Gönderim bekleniyor.
+                    <span class="stream-time">[Sistem]</span> Gizli yetkili anahtar başarıyla entegre edildi. Gönderim bekleniyor.
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Supabase REST uç noktası
+        // Supabase PostgREST veri tabanı uç noktası
         const API_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Takas";
         
-        // Son verdiğin eksiksiz ve orijinal el değmemiş anahtar
-        const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZudHhpYWZybnZ6eG0iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc4OTYwMjgwMCwiZXhwIjoyMDk0NTM2MjgwfQ.A8MnKSuf_R32cIkp5VvNAd1io1Z18_6b_AzJ5VjpytA";
+        // Gönderdiğin eksiksiz ve güçlü Gizli Yetki Anahtarı
+        const API_KEY = "sb_secret_E4XV8u3mXJNa7xF23jMcTA_SBDshrjd";
 
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
@@ -222,7 +222,7 @@
             const hedef_butce = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
-            addLog(`Veri ana havuza akıtılıyor: ${urun_adi}...`, 'info');
+            addLog(`Veri güvenli hat üzerinden gönderiliyor: ${urun_adi}...`, 'info');
 
             try {
                 const response = await fetch(API_URL, {
@@ -237,11 +237,11 @@
                 });
 
                 if (response.ok) {
-                    addLog(`🎉 <b>BAŞARILI:</b> Tünel açıldı! Veri sisteme işlendi ve havuz doldu!`, 'success');
+                    addLog(`🎉 <b>MÜKEMMEL:</b> Gizli anahtarla kilit açıldı! Veri başarıyla işlendi.`, 'success');
                     ihaleForm.reset();
                 } else {
                     const errData = await response.text();
-                    addLog(`Sunucu Yanıtı: ${response.status} - ${errData}`, 'info');
+                    addLog(`Sunucu Yanıtı Hatası: ${response.status} - ${errData}`, 'info');
                 }
             } catch (err) {
                 addLog(`Bağlantı Hatası: ${err.message}`, 'info');
