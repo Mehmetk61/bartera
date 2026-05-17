@@ -56,7 +56,6 @@
 
     <script>
         const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
-        // Supabase REST API url adresi üzerinden doğrudan şifresiz veri çekme
         const DATA_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Teklifler?select=*&order=created_at.desc";
         
         const ihaleForm = document.getElementById('ihaleForm');
@@ -73,7 +72,7 @@
         }
 
         function ekranaTeklifEkle(teklif, basaEkle = true) {
-            if(teklifStream.innerHTML.includes("Henüz canlı teklif girişi yapılmadı") || teklifStream.innerHTML.includes("Teklifler yükleniyor")) {
+            if(teklifStream.innerHTML.includes("Henüz canlı teklif girişi yapılmadı") || teklifStream.innerHTML.includes("Teklifler yükleniyor") || teklifStream.innerHTML.includes("Henüz veri girişi bulunmuyor")) {
                 teklifStream.innerHTML = "";
             }
 
@@ -112,14 +111,16 @@
             } catch (err) {
                 console.error("Hata:", err);
                 addLog("Veritabanı bağlantısı açık, yeni veri akışı bekleniyor.", "info");
-                teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz veri girişi bulunmuyor.</div>';
+                if(!teklifStream.innerHTML.includes("👤")) {
+                    teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz veri girişi bulunmuyor.</div>';
+                }
             }
         }
 
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const urun_adi = document.getElementById('urunAdi').value;
-            const hedon_butce = parseInt(document.getElementById('hedefButce').value);
+            const hedef_butce = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
             addLog(`Veri güvenli köprüye aktarılıyor...`, 'info');
@@ -128,22 +129,21 @@
                 const response = await fetch(KOPRU_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ urun_adi, hedef_butce: mod === 'Nakit/Emtia' ? hedon_butce : 0, mod })
+                    body: JSON.stringify({ urun_adi, hedef_butce: mod === 'Nakit/Emtia' ? hedef_butce : 0, mod })
                 });
 
                 if (response.ok) {
-                    addLog(`🎉 <b>BAŞARILI:</b> Köprü tetiklendi!`, 'success');
+                    addLog(`🎉 <b>BAŞARILI:</b> İhale köprüsü başarıyla tetiklendi!`, 'success');
                     ihaleForm.reset();
                     setTimeout(mevcutTeklifleriGetir, 2000);
                 } else {
-                    addLog(`Köprü Hatası (HTTP ${response.status})`, 'info');
+                    addLog(`Köprü Hatası (HTTP ${response.status}): Gönderilen veri formatını kontrol edin.`, 'info');
                 }
             } catch (err) {
                 addLog(`Bağlantı Hatası: ${err.message}`, 'info');
             }
         });
 
-        // Sayfada arka planda her 5 saniyede bir verileri yenileme döngüsü
         mevcutTeklifleriGetir();
         setInterval(mevcutTeklifleriGetir, 5000);
     </script>
