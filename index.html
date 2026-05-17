@@ -56,9 +56,8 @@
 
     <script>
         const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
-        const DATA_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Teklifler?select=*&order=created_at.desc";
+        const BASE_DATA_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Teklifler";
         
-        // Supabase Kimlik Doğrulama Anahtarları (401 Hatasını Çözen Kısım)
         const S_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZ4bnR4aWFmcm52enhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4NjE2MzYsImV4cCI6MjA1NzQzNzYzNn0.Vd314V_2r6b_0_bE6xHj7e3IqL1pS1p50jZ6_XW-3eY";
 
         const ihaleForm = document.getElementById('ihaleForm');
@@ -79,16 +78,13 @@
                 teklifStream.innerHTML = "";
             }
 
-            const veren = teklif.teklif_veren || 'Anonim Tedarikçi';
+            const veren = teklif.teklif_veren || 'Anonim Tedarier';
             const fiyat = teklif.teklif_fiyati ? Number(teklif.teklif_fiyati).toLocaleString('tr-TR') : '0';
             const ihaleId = teklif.ihale_id || '-';
 
             const item = document.createElement('div');
             item.className = 'teklif-item';
-            item.innerHTML = `
-                <span>👤 <b>${veren}</b> (İhale ID: ${ihaleId})</span>
-                <span class="teklif-fiyat">${fiyat} ₺</span>
-            `;
+            item.innerHTML = `<span>👤 <b>${veren}</b> (İhale ID: ${ihaleId})</span><span class="teklif-fiyat">${fiyat} ₺</span>`;
 
             if (basaEkle) {
                 teklifStream.insertBefore(item, teklifStream.firstChild);
@@ -99,7 +95,9 @@
 
         async function mevcutTeklifleriGetir() {
             try {
-                const response = await fetch(DATA_URL, {
+                // Önbelleği ezmek için her istekte benzersiz zaman parametresi ekliyoruz
+                const cacheBuster = `?select=*&order=created_at.desc&t=${new Date().getTime()}`;
+                const response = await fetch(BASE_DATA_URL + cacheBuster, {
                     headers: {
                         "apikey": S_KEY,
                         "Authorization": `Bearer ${S_KEY}`
@@ -147,7 +145,7 @@
                     ihaleForm.reset();
                     setTimeout(mevcutTeklifleriGetir, 2000);
                 } else {
-                    addLog(`Köprü Hatası (HTTP ${response.status})`, 'info');
+                    addLog(`Köprü Hatası (HTTP ${response.status}): Yapı uyumsuzluğu.`, 'info');
                 }
             } catch (err) {
                 addLog(`Bağlantı Hatası: ${err.message}`, 'info');
