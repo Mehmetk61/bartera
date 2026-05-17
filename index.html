@@ -13,17 +13,20 @@
         header p { color: var(--text-muted); }
         .main-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; max-width: 1200px; }
         @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } }
-        .panel { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; }
-        .panel h2 { font-size: 1.4rem; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-        .form-group { margin-bottom: 18px; }
+        .panel { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
+        .panel h2 { font-size: 1.4rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .form-group { margin-bottom: 5px; }
         .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; }
         .form-group input, .form-group select { width: 100%; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-light); font-size: 1rem; outline: none; }
         button.btn-primary { width: 100%; padding: 14px; background-color: var(--accent-orange); border: none; border-radius: 6px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; }
-        .live-stream { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; height: 320px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 0.9rem; }
-        .stream-item { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #1a2642; }
+        .live-stream { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; height: 160px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 0.9rem; }
+        .teklif-listesi { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; height: 200px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .stream-item, .teklif-item { padding-bottom: 8px; border-bottom: 1px dashed #1a2642; font-size: 0.9rem; }
+        .teklif-item { display: flex; justify-content: space-between; align-items: center; }
         .stream-success { color: var(--success-green); }
         .stream-info { color: var(--accent-blue); }
         .stream-time { color: var(--text-muted); margin-right: 5px; }
+        .teklif-fiyat { color: var(--accent-orange); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -43,14 +46,28 @@
             <div class="live-stream" id="logStream">
                 <div class="stream-item stream-info"><span class="stream-time">[Sistem]</span> Güvenli Make Köprüsü Aktif. Veri gönderimi bekleniyor.</div>
             </div>
+
+            <h2>Canlı Gelen Teklifler</h2>
+            <div class="teklif-listesi" id="teklifStream">
+                <div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif girişi yapılmadı...</div>
+            </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // 🚀 Senin Özel Güvenli Köprü Adresin Buraya Mühürlendi Lider!
+        // 🚀 Güvenli Bağlantı Bilgileri
         const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
+        
+        // 🔐 Senin Supabase Bağlantı Bilgilerin Buraya Mühürlendi Lider!
+        const SUPABASE_URL = "https://wzofshfawbfeghbftbya.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6b2ZzaGZhd2JmZWdoYmZ0YnlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5NjYxNDYsImV4cCI6MjA1NzU0MjE0Nn0.iXvWlI5f7M_yOqGisN9O-YfA2g7C_74X7X06jR-1f2s";
+
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
+        const teklifStream = document.getElementById('teklifStream');
 
         function addLog(message, type = 'info') {
             const now = new Date();
@@ -61,6 +78,7 @@
             logStream.scrollTop = logStream.scrollHeight;
         }
 
+        // 🔄 Form Gönderim Mekanizması (Make Köprüsü)
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const urun_adi = document.getElementById('urunAdi').value;
@@ -86,6 +104,29 @@
                 addLog(`Bağlantı Hatası: ${err.message}`, 'info');
             }
         });
+
+        // ⚡ SUPABASE REALTIME MOTORU: Teklifler Tablosunu Canlı Dinleme Alanı
+        supabase
+            .channel('public:Teklifler')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Teklifler' }, (payload) => {
+                const yeniTeklif = payload.new;
+                
+                // İlk girişteki "Henüz teklif yok" yazısını temizle
+                if(teklifStream.innerHTML.includes("Henüz canlı teklif girişi yapılmadı")) {
+                    teklifStream.innerHTML = "";
+                }
+
+                // Yeni gelen teklifi listeye anlık ekle
+                const item = document.createElement('div');
+                item.className = 'teklif-item';
+                item.innerHTML = `
+                    <span>👤 <b>${yeniTeklif.teklif_veren || 'Anonim Tedarikçi'}</b> (İhale ID: ${yeniTeklif.ihale_id})</span>
+                    <span class="teklif-fiyat">${yeniTeklif.teklif_fiyati.toLocaleString('tr-TR')} ₺</span>
+                `;
+                teklifStream.insertBefore(item, teklifStream.firstChild);
+                addLog(`🔔 <b>YENİ TEKLİF:</b> ${yeniTeklif.teklif_fiyati} ₺ teklif geldi!`, 'success');
+            })
+            .subscribe();
     </script>
 </body>
 </html>
