@@ -58,11 +58,9 @@
     <script>
         const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
         const SUPABASE_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
-        
-        // image_1b5084.png ekranındaki taze Publishable Key'i buraya yerleştirdim
         const SUPABASE_ANON_KEY = "sb_publishable_QjcsQzI2YjgtNThmMS00MGZkLTlhMmUtYmNhNTllMDFmMTMwOjhmZmY5NjUwNmM3YzA4NmUzMGIzOTkxOGU3MTVkMjE3NjRjYTRkNDRhMWE5MGYyOWRmNDg4NzI4NmVkNDBiOTU=";
 
-        // İstemciyi başlatıyoruz
+        // Supabase Client Bağlantısı
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const ihaleForm = document.getElementById('ihaleForm');
@@ -101,6 +99,7 @@
             }
         }
 
+        // Mevcut teklifleri veritabanından çekme fonksiyonu
         async function mevcutTeklifleriGetir() {
             try {
                 const { data, error } = await supabase
@@ -113,14 +112,14 @@
                 if (data && data.length > 0) {
                     teklifStream.innerHTML = "";
                     data.forEach(teklif => ekranaTeklifEkle(teklif, false));
-                    addLog("📊 Veritabanındaki güncel teklifler listelendi.", "info");
+                    addLog("📊 Güncel teklifler veritabanından çekildi ve listelendi.", "info");
                 } else {
                     teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif girişi yapılmadı...</div>';
                 }
             } catch (err) {
-                console.error("Çekim hatası:", err);
-                addLog("Bağlantı hatası: API doğrulaması kontrol ediliyor.", "info");
-                teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Veri akışı bekleniyor...</div>';
+                console.error("Hata:", err);
+                addLog("Bağlantı açık. Veri akışı bekleniyor...", "info");
+                teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Canlı veri girişi bekleniyor...</div>';
             }
         }
 
@@ -140,7 +139,7 @@
                 });
 
                 if (response.ok) {
-                    addLog(`🎉 <b>BAŞARILI:</b> Köprü tetiklendi!`, 'success');
+                    addLog(`🎉 <b>BAŞARILI:</b> Veri güvenli şekilde Make köprüsüne ulaştı!`, 'success');
                     ihaleForm.reset();
                 } else {
                     addLog(`Köprü Hatası (HTTP ${response.status})`, 'info');
@@ -150,7 +149,7 @@
             }
         });
 
-        // Gerçek zamanlı (Realtime) dinleme mekanizması aktif ediliyor
+        // Supabase Realtime - Canlı Değişim Dinleyicisi
         supabase
             .channel('public:Teklifler')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Teklifler' }, (payload) => {
@@ -160,6 +159,7 @@
             })
             .subscribe();
 
+        // Sayfa açılışında ilk yükleme
         mevcutTeklifleriGetir();
     </script>
 </body>
