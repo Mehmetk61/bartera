@@ -18,7 +18,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         
-        header { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        header { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
         .brand h1 { color: var(--accent-blue); font-size: 2rem; }
         .brand p { color: var(--text-muted); font-size: 0.9rem; }
         
@@ -31,24 +31,39 @@
         .btn-register { background-color: transparent; border: 1px solid var(--accent-blue); color: var(--accent-blue); }
         .btn-logout { background-color: #e63946; color: white; }
 
-        .main-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; max-width: 1200px; }
+        .main-container { display: grid; grid-template-columns: 1.21fr 0.79fr; gap: 25px; width: 100%; max-width: 1200px; }
         @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } }
         
         .panel { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; display: flex; flex-direction: column; gap: 15px; position: relative; overflow: hidden; min-height: 420px; }
-        .panel h2 { font-size: 1.4rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .panel h2 { font-size: 1.4rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         
         /* Modallar Perdesi */
-        .auth-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(19, 28, 49, 0.97); backdrop-filter: blur(6px); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; z-index: 10; padding: 20px; }
+        .auth-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(19, 28, 49, 0.98); backdrop-filter: blur(6px); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; z-index: 10; padding: 20px; }
         .auth-overlay p { color: var(--text-light); font-size: 1.1rem; text-align: center; }
         .panel.unlocked .auth-overlay { display: none !important; }
+
+        /* Akıllı Arama & AI Modülü */
+        .ai-search-box { display: flex; gap: 10px; margin-bottom: 5px; }
+        .ai-search-box input { flex: 1; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-light); font-size: 1rem; outline: none; }
+        .btn-search { background-color: var(--accent-blue); border: none; color: white; padding: 0 20px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+        
+        .history-tags { display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.8rem; color: var(--text-muted); min-height: 20px; }
+        .tag { background: #1c2a49; padding: 4px 10px; border-radius: 20px; cursor: pointer; border: 1px solid var(--border-color); transition: 0.2s; }
+        .tag:hover { border-color: var(--accent-blue); color: var(--text-light); }
+
+        .ai-recommendations { background: linear-gradient(135deg, #162646 0%, #111a30 100%); border: 1px dashed var(--accent-blue); padding: 15px; border-radius: 8px; margin-top: 5px; }
+        .ai-title { font-size: 0.85rem; font-weight: bold; color: var(--accent-blue); margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+        .ai-suggest-list { display: flex; flex-direction: column; gap: 8px; }
+        .ai-suggest-item { font-size: 0.9rem; background: rgba(10, 15, 29, 0.6); padding: 10px; border-radius: 6px; border-left: 3px solid var(--accent-orange); display: flex; justify-content: space-between; align-items: center; }
+        .ai-badge { background: var(--accent-orange); color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
 
         .form-group { margin-bottom: 12px; width: 100%; }
         .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.85rem; }
         .form-group input, .form-group select { width: 100%; padding: 10px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-light); font-size: 0.95rem; outline: none; }
         button.btn-primary { width: 100%; padding: 12px; background-color: var(--accent-orange); border: none; border-radius: 6px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 5px; }
         
-        .live-stream { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; height: 130px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 0.9rem; }
-        .teklif-listesi { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; height: 230px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .live-stream { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; height: 110px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 0.9rem; }
+        .teklif-listesi { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; height: 200px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
         .stream-item, .teklif-item { padding-bottom: 8px; border-bottom: 1px dashed #1a2642; font-size: 0.9rem; }
         .teklif-item { display: flex; justify-content: space-between; align-items: center; }
         .stream-success { color: var(--success-green); }
@@ -57,9 +72,6 @@
         .stream-time { color: var(--text-muted); margin-right: 5px; }
         .teklif-fiyat { color: var(--accent-orange); font-weight: bold; }
         .blur-text { filter: blur(4px); background: #223152; color: transparent; border-radius: 4px; padding: 0 5px; user-select: none; }
-
-        .code-container { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
-        .code-input { width: 140px; height: 45px; text-align: center; font-size: 1.4rem; font-weight: bold; color: var(--accent-blue); background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; outline: none; letter-spacing: 4px; }
     </style>
 </head>
 <body>
@@ -79,7 +91,7 @@
         <div class="panel" id="ihalePaneli">
             
             <div class="auth-overlay" id="loginEkrani" style="display: flex;">
-                <p>🔒 İhale başlatmak için giriş yapın.</p>
+                <p>🔒 Güvenli işlem havuzuna erişmek için giriş yapın.</p>
                 <div class="form-group">
                     <label>E-Posta Adresi</label>
                     <input type="email" id="loginEmail" value="kamiloglu@holding.com">
@@ -90,59 +102,74 @@
 
             <div class="auth-overlay" id="registerEkrani" style="display: none;">
                 <p>📝 Yeni Şirket Kaydı</p>
-                <div class="form-group">
-                    <label>Şirket Unvanı</label>
-                    <input type="text" id="regUnvan" placeholder="Örn: Kamiloğlu Dış Ticaret">
-                </div>
-                <div class="form-group">
-                    <label>E-Posta Adresi</label>
-                    <input type="email" id="regEmail" placeholder="firma@eposta.com">
-                </div>
-                <div class="form-group">
-                    <label>Vergi Numarası / Kimlik</label>
-                    <input type="text" id="regVergi" placeholder="10 Haneli Vergi No">
-                </div>
+                <div class="form-group"><label>Şirket Unvanı</label><input type="text" id="regUnvan" placeholder="Örn: Kamiloğlu Dış Ticaret"></div>
+                <div class="form-group"><label>E-Posta Adresi</label><input type="email" id="regEmail" placeholder="firma@eposta.com"></div>
+                <div class="form-group"><label>Vergi Numarası / Kimlik</label><input type="text" id="regVergi" placeholder="10 Haneli Vergi No"></div>
                 <button class="btn-primary" style="background-color: var(--accent-blue);" onclick="kayitTetikle()">Kayıt Ol ve Kod Gönder</button>
                 <p style="font-size:0.85rem; color:var(--text-muted);">Zaten üye misiniz? <span style="color:var(--accent-orange); cursor:pointer; font-weight:bold;" onclick="pencereGoster('login')">Giriş Yapın</span></p>
             </div>
 
             <div class="auth-overlay" id="verifyEkrani" style="display: none;">
                 <p>🛡️ Güvenlik Doğrulaması</p>
-                <p style="font-size:0.85rem; color:var(--text-muted);">Lütfen e-postanıza gönderilen 4 haneli kodu giriniz.<br><b style="color:var(--accent-orange)">Simülasyon Kodu: 6161</b></p>
-                
-                <div class="code-container">
-                    <input type="text" maxlength="4" id="dogrulamaKodu" class="code-input" placeholder="0000">
-                </div>
-
+                <p style="font-size:0.85rem; color:var(--text-muted);">Lütfen 4 haneli doğrulama kodunu giriniz.<br><b style="color:var(--accent-orange)">Simülasyon Kodu: 6161</b></p>
+                <input type="text" maxlength="4" id="dogrulamaKodu" style="width:120px; text-align:center; font-size:1.4rem; font-weight:bold; color:var(--accent-blue); background:#0a0f1d; border:1px solid var(--border-color); padding:8px; border-radius:6px; outline:none; margin:10px 0;">
                 <button class="btn-primary" style="background-color: var(--success-green);" onclick="dogrulamaTamamla()">Kodu Doğrula</button>
-                <p style="font-size:0.85rem; color:var(--accent-blue); cursor:pointer;" onclick="pencereGoster('register')">⬅ Geri Dön</p>
             </div>
 
-            <h2>Tersine İhale / Takas Başlat</h2>
-            <form id="ihaleForm">
-                <div class="form-group"><label for="urunAdi">Talep Edilen Mal / Hizmet</label><input type="text" id="urunAdi" placeholder="Örn: 100 Adet Ofis Koltuğu" required></div>
-                <div class="form-group"><label for="hedefButce">Maksimum Hedef Bütçe (₺)</label><input type="number" id="hedefButce" placeholder="Örn: 150000" required></div>
-                <div class="form-group"><label for="islemModu">İşlem Modülü</label><select id="islemModu"><option value="Nakit/Emtia">Nakit / Emtia (Tersine İhale)</option><option value="TamTakas">Tam Takas (Barter)</option><option value="KismiTakas">Kısmi Takas + Nakit</option></select></div>
-                <button type="submit" class="btn-primary">Tersine İhale Başlat</button>
-            </form>
+            <h2>Akıllı Takas ve İhale Arama</h2>
+            <div class="ai-search-box">
+                <input type="text" id="searchInput" placeholder="Ne takas etmek istersiniz? (Örn: Çay toplama makinesi, Yazılım, İş makinesi...)">
+                <button class="btn-search" onclick="aramaYap()">Ara</button>
+            </div>
+            
+            <div class="history-tags" id="historyPanel">
+                <span>Geçmiş Aramalar:</span>
+                </div>
+
+            <div class="ai-recommendations">
+                <div class="ai-title">🤖 BARTERA AI • Şirket Profilinize Özel Öneriler</div>
+                <div class="ai-suggest-list" id="aiSuggestPanel">
+                    </div>
+            </div>
         </div>
 
         <div class="panel">
+            <h2>Tersine İhale Başlat</h2>
+            <form id="ihaleForm">
+                <div class="form-group"><input type="text" id="urunAdi" placeholder="Talep Edilen Mal / Hizmet" required></div>
+                <div class="form-group"><input type="number" id="hedefButce" placeholder="Maksimum Bütçe (₺)" required></div>
+                <button type="submit" class="btn-primary">İhale Yayına Al</button>
+            </form>
+
             <h2>Sistem Günlüğü</h2>
-            <div class="live-stream" id="logStream">
-                <div class="stream-item stream-info"><span class="stream-time">[Sistem]</span> Bartera Kimlik Doğrulama Katmanı Aktif.</div>
-            </div>
+            <div class="live-stream" id="logStream"></div>
 
             <h2>Canlı Gelen Teklifler</h2>
-            <div class="teklif-listesi" id="teklifStream">
-                <div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Yükleniyor...</div>
-            </div>
+            <div class="teklif-listesi" id="teklifStream"></div>
         </div>
     </div>
 
     <script>
         let isLoggedIn = false; 
         let aktifSirketAdi = "Kamiloğlu Holding";
+        let aramaGecmisi = ["Çay Hasat Makinesi", "Platin Takası", "Ofis Mobilyası"];
+
+        // AI Kelime Dağarcığı (Kullanıcın geçmiş aramalarına göre akıllı kombinasyon üretecek motor)
+        const aiZekaHafizasi = {
+            "çay": [
+                { baslik: "Endüstriyel Çay Kurutma Ünitesi", takas: "Karşılığında Lojistik Hizmeti isteniyor", eslesme: "%98" },
+                { baslik: "Gübre ve Bahçe Bakım Ekipmanları", takas: "Tam Takas (Barter Kredisi)", eslesme: "%92" }
+            ],
+            "platin": [
+                { baslik: "Külçe Altın / Değerli Metal Takası", takas: "Kısmi Takas + Nakit", eslesme: "%96" },
+                { baslik: "Döviz Endeksli Ticari Ham Madde", takas: "Yazılım Hizmeti Karşılığı", eslesme: "%89" }
+            ],
+            "varsayilan": [
+                { baslik: "3 Katlı Topraksız Tarım / Çilek Üretim Sistemi", takas: "Otomasyon Yazılımı ile Takas", eslesme: "%95" },
+                { baslik: "Akıllı Saat ve Yaşlı Takip Sistemi (YAREN Proje Altyapısı)", takas: "Donanım / Elektronik Parça Karşılığı", eslesme: "%91" },
+                { baslik: "Premium Ambalaj & Snack Kutusu Tasarımı", takas: "Gıda Hammaddesi Karşılığı Barter", eslesme: "%87" }
+            ]
+        };
 
         const loginEkrani = document.getElementById('loginEkrani');
         const registerEkrani = document.getElementById('registerEkrani');
@@ -154,29 +181,24 @@
         const headerRegisterBtn = document.getElementById('headerRegisterBtn');
         const teklifStream = document.getElementById('teklifStream');
         const logStream = document.getElementById('logStream');
+        const historyPanel = document.getElementById('historyPanel');
+        const aiSuggestPanel = document.getElementById('aiSuggestPanel');
+        const searchInput = document.getElementById('searchInput');
 
         const sahteVeritabani = [
             { teklif_veren: "Kamiloğlu Ticaret", ihale_id: "1024", teklif_fiyati: 145000 },
-            { teklif_veren: "Of Teknoloji Ltd.", ihale_id: "1024", teklif_fiyati: 142000 },
-            { teklif_veren: "Karadeniz Lojistik", ihale_id: "1025", teklif_fiyati: 89000 }
+            { teklif_veren: "Of Teknoloji Ltd.", ihale_id: "1024", teklif_fiyati: 142000 }
         ];
 
         function addLog(message, type = 'info') {
             const now = new Date();
-            const item = document.createElement('div');
-            item.className = `stream-item stream-${type}`;
-            item.innerHTML = `<span class="stream-time">[${now.toLocaleTimeString('tr-TR')}]</span> ${message}`;
-            logStream.appendChild(item);
+            logStream.innerHTML += `<div class="stream-item stream-${type}"><span class="stream-time">[${now.toLocaleTimeString('tr-TR')}]</span> ${message}</div>`;
             logStream.scrollTop = logStream.scrollHeight;
         }
 
         function pencereGoster(hedef) {
             if(isLoggedIn && hedef !== 'logout') return;
-            
-            loginEkrani.style.display = 'none';
-            registerEkrani.style.display = 'none';
-            verifyEkrani.style.display = 'none';
-
+            loginEkrani.style.display = 'none'; registerEkrani.style.display = 'none'; verifyEkrani.style.display = 'none';
             if(hedef === 'login') loginEkrani.style.display = 'flex';
             if(hedef === 'register') registerEkrani.style.display = 'flex';
             if(hedef === 'verify') verifyEkrani.style.display = 'flex';
@@ -184,27 +206,19 @@
 
         function kayitTetikle() {
             const unvan = document.getElementById('regUnvan').value;
-            const email = document.getElementById('regEmail').value;
-            
-            if(!unvan || !email) {
-                alert("Lütfen Şirket Unvanı ve E-Posta alanlarını doldurun.");
-                return;
-            }
-
-            aktifSirketAdi = unvan; 
-            addLog(`📩 Kayıt talebi alındı. Doğrulama kodu e-postaya gönderiliyor...`, 'info');
+            if(!unvan) { alert("Lütfen Şirket Unvanını doldurun."); return; }
+            aktifSirketAdi = unvan;
+            addLog(`📩 Kayıt kodu e-postaya yönlendirildi.`, 'info');
             pencereGoster('verify');
         }
 
         function dogrulamaTamamla() {
-            const kod = document.getElementById('dogrulamaKodu').value;
-            if(kod === "6161") {
-                addLog(`🛡️ Doğrulama başarılı! Hesap aktif edildi.`, 'success');
+            if(document.getElementById('dogrulamaKodu').value === "6161") {
+                addLog(`🛡️ Kimlik doğrulandı. Güvenli ağa bağlanıldı.`, 'success');
                 isLoggedIn = true;
                 uiGuncelle();
             } else {
-                addLog(`❌ Hatalı doğrulama kodu girildi! Tekrar deneyin.`, 'danger');
-                alert("Hatalı kod! Lütfen ekranda yazan simülasyon kodunu (6161) giriniz.");
+                alert("Hatalı kod! Simülasyon kodu: 6161");
             }
         }
 
@@ -214,6 +228,60 @@
             uiGuncelle();
         }
 
+        // AKILLI ARAMA VE AI MOTORU FONKSİYONLARI
+        function aramaYap() {
+            const kelime = searchInput.value.trim();
+            if(!kelime) return;
+            
+            // Geçmişe ekle (aynısı yoksa)
+            if(!aramaGecmisi.includes(kelime)) {
+                aramaGecmisi.unshift(kelime);
+                if(aramaGecmisi.length > 5) aramaGecmisi.pop(); // Maks 5 etiket
+            }
+            
+            addLog(`🔍 "${kelime}" için takas havuzunda akıllı arama yapıldı.`, 'info');
+            searchInput.value = "";
+            gecmisAndAiYenile(kelime.toLowerCase());
+        }
+
+        function gecmisAndAiYenile(anahtarKelime = "") {
+            // 1. Geçmiş Etiketlerini Bas
+            historyPanel.innerHTML = "<span>Geçmiş Aramalar:</span>";
+            aramaGecmisi.forEach(text => {
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.innerText = text;
+                tag.onclick = () => {
+                    searchInput.value = text;
+                    aramaYap();
+                };
+                historyPanel.appendChild(tag);
+            });
+
+            // 2. AI Önerilerini Şekillendir
+            aiSuggestPanel.innerHTML = "";
+            let secilenOneriler = aiZekaHafizasi["varsayilan"];
+
+            // Arama metnine göre zekayı eşleştir
+            if(anahtarKelime.includes("çay") || anahtarKelime.includes("hasat") || anahtarKelime.includes("bahçe")) {
+                secilenOneriler = aiZekaHafizasi["çay"];
+            } else if(anahtarKelime.includes("platin") || anahtarKelime.includes("altın") || anahtarKelime.includes("metal")) {
+                secilenOneriler = aiZekaHafizasi["platin"];
+            }
+
+            secilenOneriler.forEach(item => {
+                aiSuggestPanel.innerHTML += `
+                    <div class="ai-suggest-item">
+                        <div>
+                            <b style="color:var(--text-light); font-size:0.95rem;">${item.baslik}</b><br>
+                            <span style="color:var(--text-muted); font-size:0.8rem;">🔄 ${item.takas}</span>
+                        </div>
+                        <span class="ai-badge">AI Eşleşme ${item.eslesme}</span>
+                    </div>
+                `;
+            });
+        }
+
         function uiGuncelle() {
             if (isLoggedIn) {
                 authStatusText.innerHTML = `🟢 Üye: ${aktifSirketAdi}`;
@@ -221,43 +289,35 @@
                 headerLoginBtn.innerHTML = "Çıkış Yap";
                 headerLoginBtn.className = "auth-btn btn-logout";
                 headerRegisterBtn.style.display = "none";
-                
                 ihalePaneli.classList.add('unlocked');
-                addLog(`🔐 Oturum açıldı. Hoş geldiniz, ${aktifSirketAdi}!`, "success");
+                addLog(`🔐 Akıllı AI Öneri Asistanı profilinizi optimize etti.`, "success");
             } else {
                 authStatusText.innerHTML = "🔴 Misafir Ziyaretçi";
                 authStatusText.className = "auth-status status-guest";
                 headerLoginBtn.innerHTML = "Giriş Yap";
                 headerLoginBtn.className = "auth-btn btn-login";
                 headerRegisterBtn.style.display = "inline-block";
-                
                 ihalePaneli.classList.remove('unlocked');
                 pencereGoster('login');
             }
             teklifleriEkranaBas();
+            gecmisAndAiYenile();
         }
 
         function cikisYap() {
             isLoggedIn = false;
-            addLog("Oturum güvenli bir şekilde kapatıldı.", "info");
+            addLog("Oturum kapatıldı. Veriler şifrelendi.", "info");
             uiGuncelle();
         }
+
+        headerLoginBtn.addEventListener('click', () => { isLoggedIn ? cikisYap() : pencereGoster('login'); });
+        headerRegisterBtn.addEventListener('click', () => { pencereGoster('register'); });
 
         function teklifleriEkranaBas() {
             teklifStream.innerHTML = "";
             sahteVeritabani.forEach(teklif => {
-                const item = document.createElement('div');
-                item.className = 'teklif-item';
-                
-                const gosterilecekIsim = isLoggedIn 
-                    ? `<b>${teklif.teklif_veren}</b>` 
-                    : `<span class="blur-text">Gizli Firma</span> (Giriş Yapın)`;
-
-                item.innerHTML = `
-                    <span>👤 ${gosterilecekIsim} (İhale ID: ${teklif.ihale_id})</span>
-                    <span class="teklif-fiyat">${teklif.teklif_fiyati.toLocaleString('tr-TR')} ₺</span>
-                `;
-                teklifStream.appendChild(item);
+                const name = isLoggedIn ? `<b>${teklif.teklif_veren}</b>` : `<span class="blur-text">Gizli Firma</span>`;
+                teklifStream.innerHTML += `<div class="teklif-item"><span>👤 ${name} (ID: ${teklif.ihale_id})</span><span class="teklif-fiyat">${teklif.teklif_fiyati.toLocaleString('tr-TR')} ₺</span></div>`;
             });
         }
 
@@ -265,11 +325,12 @@
             e.preventDefault();
             const urun = document.getElementById('urunAdi').value;
             const butce = document.getElementById('hedefButce').value;
-            addLog(`🚀 <b>YENİ İHALE:</b> "${urun}" için ${butce} ₺ bütçeli ihale başarıyla başlatıldı!`, 'success');
+            addLog(`🚀 <b>İHALE BAŞLATILDI:</b> "${urun}" için talep yayında.`, 'success');
             document.getElementById('ihaleForm').reset();
         });
 
-        // İlk yüklemede çalıştır
+        // Başlangıç kurulumu
+        addLog("Bartera Akıllı Yapay Zeka Altyapısı Hazır.", "info");
         uiGuncelle();
     </script>
 </body>
