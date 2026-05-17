@@ -56,10 +56,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // 🚀 Güvenli Bağlantı Bilgileri
         const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
-        
-        // 🔐 Senin Supabase Bağlantı Bilgilerin Buraya Mühürlendi Lider!
         const SUPABASE_URL = "https://wzofshfawbfeghbftbya.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6b2ZzaGZhd2JmZWdoYmZ0YnlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5NjYxNDYsImV4cCI6MjA1NzU0MjE0Nn0.iXvWlI5f7M_yOqGisN9O-YfA2g7C_74X7X06jR-1f2s";
 
@@ -78,7 +75,6 @@
             logStream.scrollTop = logStream.scrollHeight;
         }
 
-        // 🔄 Form Gönderim Mekanizması (Make Köprüsü)
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const urun_adi = document.getElementById('urunAdi').value;
@@ -107,26 +103,31 @@
 
         // ⚡ SUPABASE REALTIME MOTORU: Teklifler Tablosunu Canlı Dinleme Alanı
         supabase
-            .channel('public:Teklifler')
+            .channel('public:Teklifler_Canli')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Teklifler' }, (payload) => {
+                console.log("Yeni veri yakalandı:", payload);
                 const yeniTeklif = payload.new;
                 
-                // İlk girişteki "Henüz teklif yok" yazısını temizle
                 if(teklifStream.innerHTML.includes("Henüz canlı teklif girişi yapılmadı")) {
                     teklifStream.innerHTML = "";
                 }
 
-                // Yeni gelen teklifi listeye anlık ekle
+                const veren = yeniTeklif.teklif_veren || 'Anonim Tedarikçi';
+                const fiyat = yeniTeklif.teklif_fiyati ? yeniTeklif.teklif_fiyati.toLocaleString('tr-TR') : '0';
+                const ihaleId = yeniTeklif.ihale_id || '-';
+
                 const item = document.createElement('div');
                 item.className = 'teklif-item';
                 item.innerHTML = `
-                    <span>👤 <b>${yeniTeklif.teklif_veren || 'Anonim Tedarikçi'}</b> (İhale ID: ${yeniTeklif.ihale_id})</span>
-                    <span class="teklif-fiyat">${yeniTeklif.teklif_fiyati.toLocaleString('tr-TR')} ₺</span>
+                    <span>👤 <b>${veren}</b> (İhale ID: ${ihaleId})</span>
+                    <span class="teklif-fiyat">${fiyat} ₺</span>
                 `;
                 teklifStream.insertBefore(item, teklifStream.firstChild);
-                addLog(`🔔 <b>YENİ TEKLİF:</b> ${yeniTeklif.teklif_fiyati} ₺ teklif geldi!`, 'success');
+                addLog(`🔔 <b>YENİ TEKLİF:</b> ${fiyat} ₺ teklif geldi!`, 'success');
             })
-            .subscribe();
+            .subscribe((status) => {
+                console.log("Realtime Bağlantı Durumu:", status);
+            });
     </script>
 </body>
 </html>
