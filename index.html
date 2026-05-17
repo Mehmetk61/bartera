@@ -54,11 +54,17 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
-        // Supabase projenizin doğrudan açık REST API endpoint'i üzerinden doğrudan fetch yapıyoruz
-        const DATA_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Teklifler?select=*&order=created_at.desc";
+        const SUPABASE_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
         
+        // image_1b5084.png ekranındaki taze Publishable Key'i buraya yerleştirdim
+        const SUPABASE_ANON_KEY = "sb_publishable_QjcsQzI2YjgtNThmMS00MGZkLTlhMmUtYmNhNTllMDFmMTMwOjhmZmY5NjUwNmM3YzA4NmUzMGIzOTkxOGU3MTVkMjE3NjRjYTRkNDRhMWE5MGYyOWRmNDg4NzI4NmVkNDBiOTU=";
+
+        // İstemciyi başlatıyoruz
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
         const teklifStream = document.getElementById('teklifStream');
@@ -97,22 +103,24 @@
 
         async function mevcutTeklifleriGetir() {
             try {
-                const response = await fetch(DATA_URL);
-                if (!response.ok) throw new Error("Veri çekilemedi");
-                
-                const data = await response.json();
+                const { data, error } = await supabase
+                    .from('Teklifler')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
 
                 if (data && data.length > 0) {
                     teklifStream.innerHTML = "";
                     data.forEach(teklif => ekranaTeklifEkle(teklif, false));
-                    addLog("📊 Veritabanındaki güncel teklifler başarıyla listelendi.", "success");
+                    addLog("📊 Veritabanındaki güncel teklifler listelendi.", "info");
                 } else {
                     teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif girişi yapılmadı...</div>';
                 }
             } catch (err) {
                 console.error("Çekim hatası:", err);
-                addLog("Veritabanı bağlantısı açık, yeni veri akışı bekleniyor.", "info");
-                teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz veri girişi bulunmuyor.</div>';
+                addLog("Bağlantı hatası: API doğrulaması kontrol ediliyor.", "info");
+                teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Veri akışı bekleniyor...</div>';
             }
         }
 
@@ -134,18 +142,25 @@
                 if (response.ok) {
                     addLog(`🎉 <b>BAŞARILI:</b> Köprü tetiklendi!`, 'success');
                     ihaleForm.reset();
-                    setTimeout(mevcutTeklifleriGetir, 2000);
                 } else {
-                    addLog(`Köprü Hatası (HTTP ${response.status}): Make senaryosunu kontrol edin.`, 'info');
+                    addLog(`Köprü Hatası (HTTP ${response.status})`, 'info');
                 }
             } catch (err) {
                 addLog(`Bağlantı Hatası: ${err.message}`, 'info');
             }
         });
 
-        // Sayfa açıldığında verileri yükle ve her 4 saniyede bir arka planda sessizce listeyi tazele
+        // Gerçek zamanlı (Realtime) dinleme mekanizması aktif ediliyor
+        supabase
+            .channel('public:Teklifler')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Teklifler' }, (payload) => {
+                const yeniTeklif = payload.new;
+                ekranaTeklifEkle(yeniTeklif, true);
+                addLog(`🔔 <b>CANLI VERİ:</b> ${Number(yeniTeklif.teklif_fiyati).toLocaleString('tr-TR')} ₺ yeni teklif düştü!`, 'success');
+            })
+            .subscribe();
+
         mevcutTeklifleriGetir();
-        setInterval(mevcutTeklifleriGetir, 4000);
     </script>
 </body>
 </html>
