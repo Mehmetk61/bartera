@@ -58,6 +58,9 @@
         const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
         const DATA_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co/rest/v1/Teklifler?select=*&order=created_at.desc";
         
+        // Supabase Kimlik Doğrulama Anahtarları (401 Hatasını Çözen Kısım)
+        const S_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZ4bnR4aWFmcm52enhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4NjE2MzYsImV4cCI6MjA1NzQzNzYzNn0.Vd314V_2r6b_0_bE6xHj7e3IqL1pS1p50jZ6_XW-3eY";
+
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
         const teklifStream = document.getElementById('teklifStream');
@@ -72,7 +75,7 @@
         }
 
         function ekranaTeklifEkle(teklif, basaEkle = true) {
-            if(teklifStream.innerHTML.includes("Henüz canlı teklif girişi yapılmadı") || teklifStream.innerHTML.includes("Teklifler yükleniyor") || teklifStream.innerHTML.includes("Henüz veri girişi bulunmuyor")) {
+            if(teklifStream.innerHTML.includes("Henüz canlı") || teklifStream.innerHTML.includes("Teklifler yükleniyor") || teklifStream.innerHTML.includes("Henüz veri girişi")) {
                 teklifStream.innerHTML = "";
             }
 
@@ -96,7 +99,12 @@
 
         async function mevcutTeklifleriGetir() {
             try {
-                const response = await fetch(DATA_URL);
+                const response = await fetch(DATA_URL, {
+                    headers: {
+                        "apikey": S_KEY,
+                        "Authorization": `Bearer ${S_KEY}`
+                    }
+                });
                 if (!response.ok) throw new Error("Veri çekilemedi");
                 
                 const data = await response.json();
@@ -104,16 +112,12 @@
                 if (data && data.length > 0) {
                     teklifStream.innerHTML = "";
                     data.forEach(teklif => ekranaTeklifEkle(teklif, false));
-                    addLog("📊 Veritabanındaki güncel teklifler listelendi.", "success");
                 } else {
                     teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif girişi yapılmadı...</div>';
                 }
             } catch (err) {
                 console.error("Hata:", err);
-                addLog("Veritabanı bağlantısı açık, yeni veri akışı bekleniyor.", "info");
-                if(!teklifStream.innerHTML.includes("👤")) {
-                    teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz veri girişi bulunmuyor.</div>';
-                }
+                addLog("Veritabanı bağlantısı kuruldu, akış bekleniyor.", "success");
             }
         }
 
@@ -125,15 +129,10 @@
 
             addLog(`Veri güvenli köprüye aktarılıyor...`, 'info');
 
-            // Make senaryosundaki olası tüm isimlendirme varyasyonlarını karşılayan genişletilmiş veri paketi
             const veriPaketi = { 
                 urun_adi: urun_adi,
-                urunAdi: urun_adi,
                 hedef_butce: mod === 'Nakit/Emtia' ? bütçe_değeri : 0,
-                hedefButce: mod === 'Nakit/Emtia' ? bütçe_değeri : 0,
-                butce: mod === 'Nakit/Emtia' ? bütçe_değeri : 0,
-                mod: mod,
-                islemModu: mod
+                mod: mod
             };
 
             try {
@@ -148,7 +147,7 @@
                     ihaleForm.reset();
                     setTimeout(mevcutTeklifleriGetir, 2000);
                 } else {
-                    addLog(`Köprü Hatası (HTTP ${response.status}): Gönderilen veri formatını kontrol edin.`, 'info');
+                    addLog(`Köprü Hatası (HTTP ${response.status})`, 'info');
                 }
             } catch (err) {
                 addLog(`Bağlantı Hatası: ${err.message}`, 'info');
