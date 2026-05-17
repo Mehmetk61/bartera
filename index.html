@@ -191,18 +191,18 @@
             <h2>Canlı Veritabanı Akışı (Realtime)</h2>
             <div class="live-stream" id="logStream">
                 <div class="stream-item stream-info">
-                    <span class="stream-time">[Sistem]</span> Canlı dinleme başlatıldı. Veri bekleniyor...
+                    <span class="stream-time">[Sistem]</span> Canlı dinleme aktif. Veri bekleniyor...
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Supabase Bağlantısı (Senin paneline ait gerçek publishable key çakıldı)
+        // Çakışmaları önlemek için bağlantı istemcisini pencere düzeyindeki nesneden türetiyoruz
         const URL_ADRESI = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
         const ANAHTAR_KODU = "sb_publishable_QjcsQ_0oG-qHAM3FEQK8KQ_Rl_0BwYmK-Yv8V0DofI8";
 
-        const barteraVeritabani = supabase.createClient(URL_ADRESI, ANAHTAR_KODU, {
+        const barteraVeritabani = window.supabase.createClient(URL_ADRESI, ANAHTAR_KODU, {
             auth: { persistSession: false }
         });
 
@@ -219,7 +219,7 @@
             logStream.scrollTop = logStream.scrollHeight;
         }
 
-        // VERİ TABANINA SATIR EKLEME SİSTEMİ
+        // VERİ TABANINA VERİ GÖNDERME
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -242,7 +242,7 @@
             }
         });
 
-        // CANLI REALTIME AKIŞ SİSTEMİ
+        // GERÇEK ZAMANLI (REALTIME) DİNLEME ALTYAPISI
         barteraVeritabani
             .channel('public:Takas')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Takas' }, payload => {
