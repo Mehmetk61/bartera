@@ -44,12 +44,12 @@
         <div class="panel">
             <h2>Canlı Veritabanı Akışı (Sistem Günlüğü)</h2>
             <div class="live-stream" id="logStream">
-                <div class="stream-item stream-info"><span class="stream-time">[Sistem]</span> Güvenli Make Köprüsü Aktif. Veri gönderimi bekleniyor.</div>
+                <div class="stream-item stream-info"><span class="stream-time">[Sistem]</span> Güvenli Köprü Aktif. Girişler bekleniyor.</div>
             </div>
 
             <h2>Canlı Gelen Teklifler</h2>
             <div class="teklif-listesi" id="teklifStream">
-                <div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif girişi yapılmadı...</div>
+                <div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Teklifler yükleniyor...</div>
             </div>
         </div>
     </div>
@@ -75,10 +75,60 @@
             logStream.scrollTop = logStream.scrollHeight;
         }
 
+        // 🎨 Ekrana Teklif Basma Fonksiyonu (Sütun isimlerine göre dinamik)
+        function ekranaTeklifEkle(teklif, basaEkle = true) {
+            if(teklifStream.innerHTML.includes("Henüz canlı teklif girişi yapılmadı") || teklifStream.innerHTML.includes("Teklifler yükleniyor")) {
+                teklifStream.innerHTML = "";
+            }
+
+            // Tam olarak şemandaki sütun isimleri ile eşleştirildi
+            const veren = teklif.teklif_veren || 'Anonim Tedarikçi';
+            const fiyat = teklif.teklif_fiyati ? Number(teklif.teklif_fiyati).toLocaleString('tr-TR') : '0';
+            const ihaleId = teklif.ihale_id || '-';
+
+            const item = document.createElement('div');
+            item.className = 'teklif-item';
+            item.innerHTML = `
+                <span>👤 <b>${veren}</b> (İhale ID: ${ihaleId})</span>
+                <span class="teklif-fiyat">${fiyat} ₺</span>
+            `;
+
+            if (basaEkle) {
+                teklifStream.insertBefore(item, teklifStream.firstChild);
+            } else {
+                teklifStream.appendChild(item);
+            }
+        }
+
+        // 📥 Mevcut Teklifleri Çekme Fonksiyonu
+        async function mevcutTeklifleriGetir() {
+            try {
+                const { data, error } = await supabase
+                    .from('Teklifler')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    teklifStream.innerHTML = "";
+                    data.forEach(teklif => ekranaTeklifEkle(teklif, false));
+                    addLog(`📊 Veritabanındaki güncel ${data.length} teklif başarıyla listelendi.`, 'info');
+                } else {
+                    teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif girişi yapılmadı...</div>';
+                }
+            } catch (err) {
+                console.error("Çekim hatası:", err);
+                addLog(`Bağlantı sağlandı ancak veri bulunamadı.`, 'info');
+                teklifStream.innerHTML = '<div class="teklif-item" style="color: var(--text-muted); justify-content: center;">Henüz canlı teklif yok...</div>';
+            }
+        }
+
+        // ⚡ Formu Gönderip Köprüye Atma
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const urun_adi = document.getElementById('urunAdi').value;
-            const mahasiswa_butce = parseInt(document.getElementById('hedefButce').value);
+            const hedef_butce = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
             addLog(`Veri güvenli köprüye aktarılıyor...`, 'info');
@@ -87,47 +137,35 @@
                 const response = await fetch(KOPRU_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ urun_adi, hedef_butce: mahasiswa_butce, mod })
+                    body: JSON.stringify({ urun_adi, hedef_butce, mod })
                 });
 
                 if (response.ok) {
-                    addLog(`🎉 <b>BAŞARILI:</b> Veri güvenli şekilde Make köprüsüne ulaştı!`, 'success');
+                    addLog(`🎉 <b>BAŞARILI:</b> Köprü tetiklendi!`, 'success');
                     ihaleForm.reset();
                 } else {
-                    addLog(`Köprü Hatası: ${response.status}`, 'info');
+                    addLog(`Köprü Hatası (HTTP ${response.status}): Make senaryosunu kontrol edin.`, 'info');
                 }
             } catch (err) {
                 addLog(`Bağlantı Hatası: ${err.message}`, 'info');
             }
         });
 
-        // ⚡ SUPABASE REALTIME MOTORU: Teklifler Tablosunu Canlı Dinleme Alanı
+        // ⚡ TABLO ADI DUYARLI REALTIME MOTORU
         supabase
-            .channel('public:Teklifler_Canli')
+            .channel('public:Teklifler_Akisi')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Teklifler' }, (payload) => {
-                console.log("Yeni veri yakalandı:", payload);
+                console.log("Realtime veri yakaladı:", payload);
                 const yeniTeklif = payload.new;
-                
-                if(teklifStream.innerHTML.includes("Henüz canlı teklif girişi yapılmadı")) {
-                    teklifStream.innerHTML = "";
-                }
-
-                const veren = yeniTeklif.teklif_veren || 'Anonim Tedarikçi';
-                const fiyat = yeniTeklif.teklif_fiyati ? yeniTeklif.teklif_fiyati.toLocaleString('tr-TR') : '0';
-                const ihaleId = yeniTeklif.ihale_id || '-';
-
-                const item = document.createElement('div');
-                item.className = 'teklif-item';
-                item.innerHTML = `
-                    <span>👤 <b>${veren}</b> (İhale ID: ${ihaleId})</span>
-                    <span class="teklif-fiyat">${fiyat} ₺</span>
-                `;
-                teklifStream.insertBefore(item, teklifStream.firstChild);
-                addLog(`🔔 <b>YENİ TEKLİF:</b> ${fiyat} ₺ teklif geldi!`, 'success');
+                ekranaTeklifEkle(yeniTeklif, true);
+                addLog(`🔔 <b>CANLI VERİ:</b> ${Number(yeniTeklif.teklif_fiyati).toLocaleString('tr-TR')} ₺ yeni teklif düştü!`, 'success');
             })
             .subscribe((status) => {
-                console.log("Realtime Bağlantı Durumu:", status);
+                console.log("Realtime Durumu:", status);
             });
+
+        // Başlangıçta listele
+        mevcutTeklifleriGetir();
     </script>
 </body>
 </html>
