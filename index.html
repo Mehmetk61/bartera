@@ -191,16 +191,14 @@
             <h2>Canlı Veritabanı Akışı (Realtime)</h2>
             <div class="live-stream" id="logStream">
                 <div class="stream-item stream-info">
-                    <span class="stream-time">[Sistem]</span> Canlı dinleme başlatıldı. Veri bekleniyor...
+                    <span class="stream-time">[Sistem]</span> Canlı dinleme aktif. Veri bekleniyor...
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Supabase Bağlantı Bilgileri
         const SUPABASE_URL = "https://mnbqkmfxntxiafrnvzxm.supabase.co";
-        // Anon KEY değeriniz kodunuza gömülü kalacaktır
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uYnFrbWZ4bnR4aWFmcm52enhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTIzMTMsImV4cCI6MjA2MDg4ODMxM30.bU9pWkYwYkJndm5jM1I0NEd4cW1hZExiX2ExSnp2U3dYQmdzX3F6bF96NA";
 
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -208,7 +206,6 @@
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
 
-        // Ekrana log yazdırma fonksiyonu
         function addLog(message, type = 'info') {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('tr-TR');
@@ -219,7 +216,7 @@
             logStream.scrollTop = logStream.scrollHeight;
         }
 
-        // FORM GÖNDERME (Veritabanına Ekleme)
+        // FORM GÖNDERME
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -231,18 +228,18 @@
 
             const { data, error } = await supabase
                 .from('Takas')
-                .insert([{ urun_adi, hedef_butce, mod }]);
+                .insert([{ urun_adi, hedef_butce, mod }])
+                .select(); // Takılmayı çözen kritik düzeltme
 
             if (error) {
                 addLog(`Hata oluştu: ${error.message}`, 'info');
-                console.error(error);
             } else {
                 addLog(`İhale başarıyla sisteme gönderildi!`, 'success');
                 ihaleForm.reset();
             }
         });
 
-        // SUPABASE REALTIME (Canlı Veri Dinleme)
+        // CANLI VERİ DİNLEME (REALTIME)
         supabase
             .channel('public:Takas')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Takas' }, payload => {
