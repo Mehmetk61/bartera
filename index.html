@@ -14,7 +14,6 @@
             --text-muted: #8da2bb; 
             --success-green: #2ec4b6; 
             --border-color: #223152; 
-            --star-gold: #ffb703;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
@@ -23,13 +22,15 @@
         .brand h1 { color: var(--accent-blue); font-size: 2rem; }
         .brand p { color: var(--text-muted); font-size: 0.9rem; }
         
+        /* Dijital Saat Düzenlemesi */
+        .live-clock-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-blue); padding: 5px 12px; border-radius: 6px; font-family: monospace; font-size: 0.95rem; color: var(--accent-blue); font-weight: bold; }
+
         .auth-panel { background-color: var(--panel-bg); padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; }
         .auth-status { font-size: 0.9rem; font-weight: bold; }
         .status-guest { color: var(--accent-orange); }
         .status-user { color: var(--success-green); }
         .auth-btn { padding: 8px 16px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-login { background-color: var(--accent-blue); color: white; }
-        .btn-register { background-color: transparent; border: 1px solid var(--accent-blue); color: var(--accent-blue); }
 
         .main-container { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 25px; width: 100%; max-width: 1200px; }
         @media (max-width: 992px) { .main-container { grid-template-columns: 1fr; } }
@@ -46,33 +47,41 @@
         .ai-search-box input { flex: 1; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-light); font-size: 1rem; outline: none; }
         .btn-search { background-color: var(--accent-blue); border: none; color: white; padding: 0 20px; font-weight: bold; border-radius: 6px; cursor: pointer; }
         
-        .history-tags { display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.8rem; color: var(--text-muted); }
-        .tag { background: #1c2a49; padding: 4px 10px; border-radius: 20px; cursor: pointer; border: 1px solid var(--border-color); }
-
-        /* Canlı Teklifler ve Profil Tetikleyici */
+        /* Canlı Teklifler */
         .teklif-listesi { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; height: 180px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
         .teklif-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px dashed #1a2642; font-size: 0.9rem; }
         .firma-link { color: var(--accent-blue); cursor: pointer; font-weight: bold; text-decoration: underline; }
         .teklif-fiyat { color: var(--accent-orange); font-weight: bold; }
 
-        /* Dinamik Satıcı Profili & Güvenilirlik Kartı */
+        /* Satıcı Profil Kartı */
         .profile-card { background: linear-gradient(135deg, #182542 0%, #0f182c 100%); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; display: none; flex-direction: column; gap: 10px; }
         .profile-header { display: flex; justify-content: space-between; align-items: center; }
         .trust-score { background: var(--success-green); color: white; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
         .comment-box { background: rgba(10, 15, 29, 0.5); padding: 8px; border-radius: 6px; font-size: 0.85rem; border-left: 3px solid var(--accent-blue); margin-top: 5px; }
 
-        /* İşlem Planlama Modülü */
-        .planning-box { background: #192747; border: 1px solid var(--accent-orange); padding: 15px; border-radius: 8px; display: none; flex-direction: column; gap: 10px; }
-        .plan-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        /* YENİ: ETKİLEŞİMLİ TAKVİM VE ENTEGRE NOT DEFTERİ MODÜLÜ */
+        .planning-box { background: #192747; border: 1px solid var(--accent-orange); padding: 18px; border-radius: 8px; display: none; flex-direction: column; gap: 12px; }
+        
+        .calendar-widget { background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--accent-blue); font-size: 0.95rem; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; font-size: 0.85rem; }
+        .day-name { color: var(--text-muted); font-weight: bold; padding-bottom: 4px; }
+        .calendar-day { padding: 6px; background: #131c31; border-radius: 4px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
+        .calendar-day:hover { border-color: var(--accent-blue); background: #1c2a49; }
+        .calendar-day.selected { background: var(--accent-orange) !important; color: white; font-weight: bold; }
+        .calendar-day.has-note { border-bottom: 3px solid var(--success-green); }
+
+        .notebook-area { background: rgba(10, 15, 29, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .notebook-area h4 { font-size: 0.9rem; color: var(--accent-orange); display: flex; justify-content: space-between; }
+        .notebook-area textarea { width: 100%; height: 65px; background: #0a0f1d; border: 1px solid var(--border-color); border-radius: 4px; color: white; padding: 8px; font-size: 0.85rem; resize: none; outline: none; }
         
         .form-group { width: 100%; }
         .form-group label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 0.8rem; }
-        .form-group input, .form-group select { width: 100%; padding: 8px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-light); outline: none; }
+        .form-group select { width: 100%; padding: 8px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-light); outline: none; }
         
         .live-stream { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; height: 110px; overflow-y: auto; padding: 12px; font-family: monospace; font-size: 0.85rem; }
-        .stream-item { padding-bottom: 5px; font-size: 0.85rem; border-bottom: 1px dashed #1a2642; }
+        .stream-item { padding-bottom: 5px; border-bottom: 1px dashed #1a2642; }
         .stream-success { color: var(--success-green); }
-        .stream-info { color: var(--accent-blue); }
         .blur-text { filter: blur(4px); background: #223152; color: transparent; border-radius: 4px; padding: 0 5px; user-select: none; }
     </style>
 </head>
@@ -80,8 +89,9 @@
     <header>
         <div class="brand">
             <h1>BARTERA</h1>
-            <p>Akıllı Takas, Barter ve Satıcı Güvenlik Havuzu</p>
+            <p>Akıllı Takas, Barter ve Lojistik Yönetim Hub'ı</p>
         </div>
+        <div class="live-clock-box" id="digitalClock">00:00:00</div>
         <div class="auth-panel">
             <span id="authStatusText" class="auth-status status-guest">🔴 Misafir Ziyaretçi</span>
             <button id="headerLoginBtn" class="auth-btn btn-login" onclick="loginTamamla()">Giriş Yap</button>
@@ -91,17 +101,14 @@
     <div class="main-container">
         <div class="panel" id="ihalePaneli">
             <div class="auth-overlay" id="loginEkrani">
-                <p>🔒 Satıcı güvenilirlik raporları ve planlama için giriş yapın.</p>
-                <button class="btn-primary" style="padding: 10px 20px; width:auto;" onclick="loginTamamla()">Hızlı Giriş Yap</button>
+                <p>🔒 Entegre Takvim, Kurumsal Not Defteri ve Planlama için Giriş Yapın.</p>
+                <button class="btn-primary" style="padding: 10px 20px; width:auto; background:var(--accent-orange); border:none; color:white; font-weight:bold; border-radius:4px; cursor:pointer;" onclick="loginTamamla()">Hızlı Giriş Yap</button>
             </div>
 
             <h2>Akıllı Takas ve İhale Arama</h2>
             <div class="ai-search-box">
                 <input type="text" id="searchInput" placeholder="İlan veya firma arayın...">
-                <button class="btn-search" onclick="aramaYap()">Ara</button>
-            </div>
-            <div class="history-tags" id="historyPanel">
-                <span>Geçmiş:</span><span class="tag">Çay Makinesi</span><span class="tag">Platin</span>
+                <button class="btn-search" onclick="addLog('Arama yapıldı.', 'info')">Ara</button>
             </div>
 
             <div class="profile-card" id="sellerProfileCard">
@@ -109,44 +116,48 @@
                     <h3 id="profFirmaAdi" style="color: var(--accent-blue);">Firma Adı</h3>
                     <span class="trust-score" id="profSkor">9.8/10</span>
                 </div>
-                <p style="font-size: 0.85rem; color: var(--text-muted);" id="profSektor">Sektör: Endüstriyel Üretim</p>
-                <p style="font-size: 0.9rem; font-weight: bold; margin-top: 5px;">⭐ Son Kurumsal Yorumlar:</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted);" id="profSektor"></p>
                 <div id="profYorumlar"></div>
             </div>
 
             <div class="planning-box" id="planningBox">
-                <h3 style="color: var(--accent-orange); font-size: 1.1rem;">📅 Akıllı Takas & Lojistik Planlama</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Teklifi onaylanan firma ile teslimat sürecini koordine edin.</p>
-                <div class="plan-inputs">
-                    <div class="form-group">
-                        <label>Planlanan Teslim Tarihi</label>
-                        <input type="date" id="planTarih" value="2026-06-01">
+                <h3 style="color: var(--accent-orange); font-size: 1.1rem;">📅 Lojistik Takvimi & İşlem Not Defteri</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Anlaşma sağladığınız firma için teslimat gününü seçin ve o güne özel gizli notunuzu düşüp kilitleyin.</p>
+                
+                <div class="calendar-widget">
+                    <div class="calendar-header">
+                        <span>Haziran 2026</span>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Gün seçmek için tıklayın</span>
                     </div>
-                    <div class="form-group">
-                        <label>Lojistik / Taşıma Tipi</label>
-                        <select id="lojistikTipi">
-                            <option value="Firma Özmal Araç">Firma Özmal Araç</option>
-                            <option value="Barter Lojistik Ağı">Barter Lojistik Ağı</option>
-                            <option value="Alıcı Tarafından Teslimat">Alıcı Tarafından Teslimat</option>
-                        </select>
+                    <div class="calendar-grid">
+                        <div class="day-name">Pzt</div><div class="day-name">Sal</div><div class="day-name">Çar</div><div class="day-name">Per</div><div class="day-name">Cum</div><div class="day-name">Cmt</div><div class="day-name">Paz</div>
+                        <div class="calendar-day" onclick="gunSec(1)">1</div><div class="calendar-day" onclick="gunSec(2)">2</div><div class="calendar-day" onclick="gunSec(3)">3</div><div class="calendar-day" onclick="gunSec(4)">4</div><div class="calendar-day" onclick="gunSec(5)">5</div><div class="calendar-day" onclick="gunSec(6)">6</div><div class="calendar-day" onclick="gunSec(7)">7</div>
+                        <div class="calendar-day" onclick="gunSec(8)">8</div><div class="calendar-day" onclick="gunSec(9)">9</div><div class="calendar-day" onclick="gunSec(10)">10</div><div class="calendar-day" onclick="gunSec(11)">11</div><div class="calendar-day" onclick="gunSec(12)">12</div><div class="calendar-day" onclick="gunSec(13)">13</div><div class="calendar-day" onclick="gunSec(14)">14</div>
+                        <div class="calendar-day" onclick="gunSec(15)">15</div><div class="calendar-day" onclick="gunSec(16)">16</div><div class="calendar-day" onclick="gunSec(17)">17</div><div class="calendar-day" onclick="gunSec(18)">18</div><div class="calendar-day" onclick="gunSec(19)">19</div><div class="calendar-day" onclick="gunSec(20)">20</div><div class="calendar-day" onclick="gunSec(21)">21</div>
                     </div>
                 </div>
-                <button class="btn-search" style="background-color: var(--success-green); padding: 8px;" onclick="planiKaydet()">Planlamayı Kilitle ve Onayla</button>
+
+                <div class="notebook-area">
+                    <h4>📝 Günlük Not Defteri <span id="secilenGunEtiket" style="color:var(--accent-blue);">[Gün Seçilmedi]</span></h4>
+                    <textarea id="noteText" placeholder="Bu tarihteki sevkiyat, tır plakası, teslimat veya barter kredisi detaylarını buraya not edin..."></textarea>
+                    <button style="background:var(--accent-blue); color:white; border:none; padding:4px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="notuGeciciKaydet()">Notu Tarihe İşle</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Lojistik / Taşıma Tipi</label>
+                    <select id="lojistikTipi">
+                        <option value="Kamiloğlu Özmal Filosu">Kamiloğlu Özmal Filosu</option>
+                        <option value="Barter Güvenli Lojistik Ağı">Barter Güvenli Lojistik Ağı</option>
+                        <option value="Hava Kargo / Değerli Metal Sevkiyatı">Hava Kargo / Değerli Metal Sevkiyatı</option>
+                    </select>
+                </div>
+                <button class="btn-search" style="background-color: var(--success-green); padding: 10px; font-weight:bold; border:none; color:white; border-radius:6px; cursor:pointer;" onclick="planiKaydet()">Takvimi ve Planı Sistemi Kilitle</button>
             </div>
         </div>
 
         <div class="panel">
-            <h2>Canlı Gelen Teklifler <span style="font-size:0.75rem; color:var(--text-muted);">(Profil için firmaya tıkla)</span></h2>
+            <h2>Canlı Gelen Teklifler <span style="font-size:0.75rem; color:var(--text-muted);">(İşlem için firmaya tıkla)</span></h2>
             <div class="teklif-listesi" id="teklifStream"></div>
-
-            <h2>Tersine İhale Başlat</h2>
-            <form id="ihaleForm" onsubmit="ihaleTetikle(event)">
-                <div class="plan-inputs">
-                    <input type="text" id="urunAdi" placeholder="Mal / Hizmet" style="padding:10px; background:var(--bg-dark); border:1px solid var(--border-color); border-radius:6px; color:white;" required>
-                    <input type="number" id="hedefButce" placeholder="Bütçe (₺)" style="padding:10px; background:var(--bg-dark); border:1px solid var(--border-color); border-radius:6px; color:white;" required>
-                </div>
-                <button type="submit" class="btn-primary" style="margin-top:10px;">İhale Aç</button>
-            </form>
 
             <h2>Sistem Günlüğü</h2>
             <div class="live-stream" id="logStream"></div>
@@ -156,32 +167,23 @@
     <script>
         let isLoggedIn = false;
         let seciliFirma = "";
+        let secilenGun = null;
+        let takvimNotlari = {}; // Gün bazlı not tutma hafızası
 
-        // Gelişmiş Satıcı Veritabanı (Güvenilirlik ve Yorumlar)
+        // Kurumsal Şirket Hafızası
         const sirketVeritabanı = {
-            "Kamiloğlu Ticaret": {
-                skor: "9.9/10 ✔ Onaylı Baş Satıcı",
-                sektor: "Endüstriyel Tarım & Emtia Tedariği",
-                yorumlar: [
-                    { yazar: "Of Lojistik A.Ş.", metin: "9000 kg tonajlı çay hasat sevkiyatını tam zamanında ve eksiksiz takas ettik. Güvenilir partner." },
-                    { yazar: "Karadeniz Metal", metin: "Kısmi barter ve platin işlemlerinde finansal vizyonu çok yüksek bir holding." }
-                ]
-            },
-            "Of Teknoloji Ltd.": {
-                skor: "9.4/10",
-                sektor: "Yazılım & Otomasyon Sistemleri",
-                yorumlar: [
-                    { yazar: "Doğu Otomasyon", metin: "Topraksız tarım otomasyon yazılımlarını barter kredisi karşılığında başarıyla devraldık." }
-                ]
-            },
-            "Karadeniz Lojistik": {
-                skor: "9.6/10",
-                sektor: "Uluslararası Taşımacılık & Depolama",
-                yorumlar: [
-                    { yazar: "Pumpi Fitness Gıda", metin: "Atıştırmalık ürünlerimizin ambalaj lojistiğini takas usulüyle sorunsuz çözdüler." }
-                ]
-            }
+            "Kamiloğlu Ticaret": { skor: "9.9/10 ✔ Onaylı Baş Satıcı", sektor: "Endüstriyel Tarım & Emtia Tedariği", yorumlar: ["9000 kg tonajlı çay hasat sevkiyatı başarıyla tamamlandı."] },
+            "Of Teknoloji Ltd.": { skor: "9.4/10", sektor: "Yazılım & Otomasyon Sistemleri", yorumlar: ["Topraksız tarım otomasyon yazılımı takası yapıldı."] },
+            "Karadeniz Lojistik": { skor: "9.6/10", sektor: "Uluslararası Taşımacılık", yorumlar: ["Gıda ambalaj ve sevkiyat lojistiği takasla çözüldü."] }
         };
+
+        // Dijital Saat Motoru
+        function saatiGuncelle() {
+            const now = new Date();
+            document.getElementById('digitalClock').innerText = now.toLocaleTimeString('tr-TR');
+        }
+        setInterval(saatiGuncelle, 1000);
+        saatiGuncelle();
 
         function addLog(message, type = 'info') {
             const now = new Date();
@@ -194,27 +196,20 @@
             const stream = document.getElementById('teklifStream');
             stream.innerHTML = "";
             Object.keys(sirketVeritabanı).forEach((firma, index) => {
-                const fiyat = 140000 + (index * 5000);
+                const fiyat = 145000 + (index * 4500);
                 const isimAlani = isLoggedIn 
-                    ? `<span class="firma-link" onclick="profilGoster('${firma}')">👤 ${firma}</span>` 
-                    : `<span class="blur-text">Gizli Firma</span> (Giriş Yapın)`;
+                    ? `<span class="firma-link" onclick="profilVePlanAc('${firma}')">👤 ${firma}</span>` 
+                    : `<span class="blur-text">Gizli Firma</span>`;
                 
-                const butonAlani = isLoggedIn
-                    ? `<button style="background:var(--accent-orange); border:none; color:white; padding:3px 8px; border-radius:4px; cursor:pointer; font-size:0.8rem;" onclick="planlamaBaslat('${firma}')">İşlem Başlat</button>`
-                    : ``;
-
                 stream.innerHTML += `
                     <div class="teklif-item">
-                        <div>${isimAlani} (İhale ID: 102${index})</div>
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <span class="teklif-fiyat">${fiyat.toLocaleString('tr-TR')} ₺</span>
-                            ${butonAlani}
-                        </div>
+                        <div>${isimAlani} (ID: 102${index})</div>
+                        <span class="teklif-fiyat">${fiyat.toLocaleString('tr-TR')} ₺</span>
                     </div>`;
             });
         }
 
-        function profilGoster(firmaAdi) {
+        function profilVePlanAc(firmaAdi) {
             seciliFirma = firmaAdi;
             const data = sirketVeritabanı[firmaAdi];
             document.getElementById('sellerProfileCard').style.display = "flex";
@@ -222,26 +217,45 @@
             document.getElementById('profSkor').innerText = data.skor;
             document.getElementById('profSektor').innerText = `Sektör: ${data.sektor}`;
             
-            const yorumPanel = document.getElementById('profYorumlar');
-            yorumPanel.innerHTML = "";
-            data.yorumlar.forEach(y => {
-                yorumPanel.innerHTML += `<div class="comment-box"><b>${y.yazar}:</b> "${y.metin}"</div>`;
-            });
-            addLog(`📄 ${firmaAdi} kurumsal güvenilirlik raporu inceleniyor.`, 'info');
+            // Lojistik Planlama ve Takvimi Aç
+            document.getElementById('planningBox').style.display = "flex";
+            addLog(`📅 ${firmaAdi} ile sözleşme için Takvim ve Not Defteri modülü açıldı.`, 'info');
         }
 
-        function planlamaBaslat(firmaAdi) {
-            seciliFirma = firmaAdi;
-            document.getElementById('planningBox').style.display = "flex";
-            document.getElementById('planningBox').scrollIntoView({ behavior: 'smooth' });
-            addLog(`📅 ${firmaAdi} ile teslimat ve lojistik takvimi oluşturuluyor.`, 'info');
+        // Takvim Etkileşim Fonksiyonları
+        function gunSec(gun) {
+            secilenGun = gun;
+            // Eski seçili klası temizle
+            document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
+            // Yeni seçilene ekle
+            event.target.classList.add('selected');
+            
+            document.getElementById('secilenGunEtiket').innerText = `[${gun} Haziran 2026]`;
+            // Varsa o güne ait notu textarea'ya bas
+            document.getElementById('noteText').value = takvimNotlari[gun] || "";
+        }
+
+        function notuGeciciKaydet() {
+            if(!secilenGun) { alert("Lütfen önce takvimden bir gün seçin lider!"); return; }
+            const notIcerik = document.getElementById('noteText').value.trim();
+            takvimNotlari[secilenGun] = notIcerik;
+            
+            if(notIcerik) {
+                document.querySelectorAll('.calendar-day')[secilenGun - 1].classList.add('has-note');
+                addLog(`📝 Takvimde ${secilenGun} Haziran gününe not iliştirildi.`, 'info');
+            } else {
+                document.querySelectorAll('.calendar-day')[secilenGun - 1].classList.remove('has-note');
+            }
         }
 
         function planiKaydet() {
-            const tarih = document.getElementById('planTarih').value;
+            if(!secilenGun) { alert("Lütfen takvimden teslimat/işlem günü seçimi yapın lider!"); return; }
             const lojistik = document.getElementById('lojistikTipi').value;
-            addLog(`✔ <b>PLANLAMA ONAYLANDI:</b> ${seciliFirma} ile ${tarih} tarihinde "${lojistik}" modeliyle teslimat kilitlendi!`, 'success');
+            const oGununNotu = takvimNotlari[secilenGun] ? ` | Eklenen Not: "${takvimNotlari[secilenGun]}"` : "";
+            
+            addLog(`✔ <b>AKILLI SÖZLEŞME KİLİTLENDİ:</b> ${seciliFirma} ile <b>${secilenGun} Haziran 2026</b> tarihi "${lojistik}" modeliyle sisteme işlendi!${oGununNotu}`, 'success');
             document.getElementById('planningBox').style.display = "none";
+            document.getElementById('sellerProfileCard').style.display = "none";
         }
 
         function loginTamamla() {
@@ -250,24 +264,12 @@
             document.getElementById('authStatusText').className = "auth-status status-user";
             document.getElementById('headerLoginBtn').style.display = "none";
             document.getElementById('ihalePaneli').classList.add('unlocked');
-            addLog("Oturum açıldı: Güvenilirlik modülü ve lojistik planlama aktif.", "success");
+            addLog("Oturum açıldı: Gerçek zamanlı ERP takvimi ve not defteri entegrasyonu senkronize edildi.", "success");
             teklifleriEkranaBas();
         }
 
-        function aramaYap() {
-            const val = document.getElementById('searchInput').value;
-            if(val) addLog(`🔍 "${val}" aramasına uygun güvenilir satıcılar filtrelendi.`, 'info');
-        }
-
-        function ihaleTetikle(e) {
-            e.preventDefault();
-            const urun = document.getElementById('urunAdi').value;
-            addLog(`🚀 <b>YENİ İLAN:</b> "${urun}" için aktif takas ihalesi başlatıldı.`, 'success');
-            document.getElementById('ihaleForm').reset();
-        }
-
-        // İlk Çalıştırma
-        addLog("Bartera Güven Katmanı Altyapısı Aktif.", "info");
+        // Başlangıç kurulumu
+        addLog("Bartera Dijital Saat ve Ajanda Motoru Başlatıldı.", "info");
         teklifleriEkranaBas();
     </script>
 </body>
