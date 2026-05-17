@@ -46,8 +46,8 @@
         </div>
     </div>
     <script>
-        // ⚠️ AZ ÖNCE MAKE'DEN KOPYALADIĞIN O MOR LINKI BU IKİ TIRNAK ARASINA YAPIŞTIR
-        const KOPRU_URL = "BURAYA_MAKE_SİTESİNDEN_KOPYALADIĞIN_WEBHOOK_LİNKİNİ_YAPIŞTIR";
+        // 🚀 Senin Özel Güvenli Köprü Adresin Buraya Mühürlendi Lider!
+        const KOPRU_URL = "https://hook.eu1.make.com/jvnauk2q6wob7s3vwv6spv8qxd59jcvt";
 
         const ihaleForm = document.getElementById('ihaleForm');
         const logStream = document.getElementById('logStream');
@@ -64,7 +64,7 @@
         ihaleForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const urun_adi = document.getElementById('urunAdi').value;
-            const hedef_butce = parseInt(document.getElementById('hedefButce').value);
+            const mahasiswa_butce = parseInt(document.getElementById('hedefButce').value);
             const mod = document.getElementById('islemModu').value;
 
             addLog(`Veri güvenli köprüye aktarılıyor...`, 'info');
@@ -73,7 +73,7 @@
                 const response = await fetch(KOPRU_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ urun_adi, hedef_butce, mod })
+                    body: JSON.stringify({ urun_adi, hedef_butce: mahasiswa_butce, mod })
                 });
 
                 if (response.ok) {
